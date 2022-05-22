@@ -1,28 +1,27 @@
-import {
-  Card, ListGroup,
-} from 'react-bootstrap';
-// eslint-disable-next-line arrow-body-style
+import { ListGroup } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+
+import Item from './Item.jsx';
+
+const getItemsIds = (state) => {
+  const itemsIds = Object.values(state.entities.listItem.byId)
+    .filter(({ listId }) => listId === state.ui.activeList)
+    .map(({ itemId }) => itemId);
+  return state.ui.filteringStatus === 'all'
+    ? itemsIds
+    : itemsIds.filter((id) => !state.entities.items.byId[id].isRead);
+};
+
 const Items = () => {
+  const itemsIds = useSelector(getItemsIds);
+
+  if (itemsIds.length === 0) {
+    return null;
+  }
+
   return (
-    <ListGroup variant="flush" className="my-2">
-      <Card as={ListGroup.Item} action onClick={null} className="rounded-0">
-        <Card.Body>
-          <Card.Title>Title</Card.Title>
-          <Card.Subtitle>Author</Card.Subtitle>
-          <Card.Text>
-            Sed ut perspiciatis unde omnis iste natus error...
-          </Card.Text>
-        </Card.Body>
-      </Card>
-      <Card as={ListGroup.Item} action onClick={null} className="rounded-0">
-        <Card.Body>
-          <Card.Title>Title</Card.Title>
-          <Card.Subtitle>Author</Card.Subtitle>
-          <Card.Text>
-            Description.
-          </Card.Text>
-        </Card.Body>
-      </Card>
+    <ListGroup variant="flush" className="w-100 my-2">
+      {itemsIds.map((id) => <Item key={id} id={id} />)}
     </ListGroup>
   );
 };
