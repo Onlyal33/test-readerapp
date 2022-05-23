@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 
-import { addItem } from '../../slices/itemsSlice.js';
-import { addItemToList } from '../../slices/listItemSlice.js';
-import { updateItemInSearchResults } from '../../slices/searchResultsSlice.js';
-import routes from '../../routes.js';
+import { addItem } from '../items/itemsSlice.js';
+import { addItemToList } from '../items/listItemSlice.js';
+import { updateItemInSearchResults } from '../search/searchResultsSlice.js';
+import routes from '../../common/routes.js';
 
 const getDefaultListId = (state) => state.entities.lists.byId[state.entities.lists.allIds[0]].id;
 

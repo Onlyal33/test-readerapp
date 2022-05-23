@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 
-import { saveNotes } from '../slices/itemsSlice';
+import { saveNotes } from './items/itemsSlice.js';
 
 const Notes = ({ id, savedNotes, onHide }) => {
   const [notes, setNotes] = useState(savedNotes);

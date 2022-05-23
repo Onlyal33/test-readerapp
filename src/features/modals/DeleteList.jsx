@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, Modal, Button } from 'react-bootstrap';
 
-import { deleteList } from '../../slices/listsSlice.js';
+import { deleteList } from '../../features/lists/listsSlice.js';
 
 const generateOnSubmit = ({ onHide, dispatch, item }) => (e) => {
   e.preventDefault();

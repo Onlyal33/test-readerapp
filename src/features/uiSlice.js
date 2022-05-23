@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
-import { deleteList } from './listsSlice.js';
-import { deleteItem } from './itemsSlice.js';
+import { deleteList } from './lists/listsSlice.js';
+import { deleteItem } from './items/itemsSlice.js';
 
 const uiSlice = createSlice({
   name: 'ui',

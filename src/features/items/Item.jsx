@@ -2,8 +2,8 @@ import {
   Button, ButtonGroup, Card, Dropdown, ListGroup,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleReadStatus } from '../slices/itemsSlice.js';
-import { changeActiveItem, openModal } from '../slices/uiSlice.js';
+import { toggleReadStatus } from './itemsSlice.js';
+import { changeActiveItem, openModal } from '../uiSlice.js';
 
 const hasListsToAddTo = (id) => (state) => {
   const listsIds = state.entities.lists.allIds;

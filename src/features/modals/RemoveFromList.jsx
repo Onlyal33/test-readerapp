@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-import { removeItemFromList } from '../../slices/listItemSlice.js';
+import { removeItemFromList } from '../items/listItemSlice.js';
 
 const getLists = (id) => (state) => {
   const listsWithItemIds = Object.values(state.entities.listItem.byId)

@@ -3,12 +3,12 @@ import {
 } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import Header from './components/Header.jsx';
-import Lists from './components/Lists.jsx';
-import Search from './components/Search.jsx';
-import Items from './components/Items.jsx';
-import Contents from './components/Contents.jsx';
-import SaveButton from './components/SaveButton.jsx';
+import Header from '../features/Header.jsx';
+import Lists from '../features/lists/Lists.jsx';
+import Search from '../features/search/Search.jsx';
+import Items from '../features/items/Items.jsx';
+import Contents from '../features/Contents.jsx';
+import SaveButton from '../features/SaveButton.jsx';
 
 const App = () => {
   const searchVisibility = useSelector((state) => state.ui.searchVisibility);

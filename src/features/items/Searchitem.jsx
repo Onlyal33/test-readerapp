@@ -4,9 +4,9 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
-import routes from '../routes.js';
-import { changeActiveItem, openModal } from '../slices/uiSlice.js';
-import { updateItemInSearchResults } from '../slices/searchResultsSlice.js';
+import routes from '../../common/routes.js';
+import { changeActiveItem, openModal } from '../uiSlice.js';
+import { updateItemInSearchResults } from '../search/searchResultsSlice.js';
 
 const SearchItem = ({ item }) => {
   const { id: itemId } = item;

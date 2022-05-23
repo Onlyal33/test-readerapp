@@ -6,13 +6,13 @@ import { Formik, Form, useField } from 'formik';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 
-import routes from '../routes';
-import { addItemToSearchResults, clearSearchResults } from '../slices/searchResultsSlice';
-import { changeActiveList, changeDisplayingItemType, setSearchResultsNumber } from '../slices/uiSlice';
+import routes from '../../common/routes';
+import { addItemToSearchResults, clearSearchResults } from './searchResultsSlice';
+import { changeActiveList, changeDisplayingItemType, setSearchResultsNumber } from '../uiSlice';
 
 const handleSubmit = (dispatch) => async (values, actions) => {
   const filteredEntries = Object.entries(values).filter(([, value]) => value !== '');
-  const url = routes.search(Object.fromEntries(filteredEntries));
+  const url = routes.advancedSearch(Object.fromEntries(filteredEntries));
   try {
     const { data } = await axios.get(url);
     dispatch(clearSearchResults());

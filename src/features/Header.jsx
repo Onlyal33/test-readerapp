@@ -3,7 +3,7 @@ import {
   Navbar, Button, Col,
 } from 'react-bootstrap';
 
-import { toggleSearchVisibility, toggleFilter } from '../slices/uiSlice';
+import { toggleSearchVisibility, toggleFilter } from './uiSlice';
 
 const Header = () => {
   const dispatch = useDispatch();

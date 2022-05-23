@@ -2,11 +2,11 @@ import {
   ButtonGroup, Button, Dropdown, Nav,
 } from 'react-bootstrap';
 import { shallowEqual, useSelector, useDispatch } from 'react-redux';
-import { clearSearchResults } from '../slices/searchResultsSlice.js';
+import { clearSearchResults } from '../search/searchResultsSlice.js';
 import {
   changeActiveList, changeDisplayingItemType, openModal, closeModal,
-} from '../slices/uiSlice.js';
-import getModal from './modals/index.js';
+} from '../uiSlice.js';
+import getModal from '../modals/index.js';
 
 const renderModal = ({ modalsState, hideModal }) => {
   if (!modalsState.type) {

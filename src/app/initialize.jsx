@@ -3,11 +3,11 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 
 import App from './App.jsx';
-import itemsReducer from './slices/itemsSlice.js';
-import listsReducer from './slices/listsSlice.js';
-import uiReducer from './slices/uiSlice.js';
-import listItemReducer from './slices/listItemSlice.js';
-import searchResultsReducer from './slices/searchResultsSlice.js';
+import itemsReducer from '../features/items/itemsSlice.js';
+import listsReducer from '../features/lists/listsSlice.js';
+import uiReducer from '../features/uiSlice.js';
+import listItemReducer from '../features/items/listItemSlice.js';
+import searchResultsReducer from '../features/search/searchResultsSlice.js';
 
 const initialize = () => {
   const localState = (JSON.parse(localStorage.getItem('readerAppState')) ?? {});

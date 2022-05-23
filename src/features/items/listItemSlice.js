@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { deleteItem } from './itemsSlice.js';
-import { deleteList } from './listsSlice.js';
+import { deleteList } from '../lists/listsSlice.js';
 
 const listItemSlice = createSlice({
   name: 'listItem',

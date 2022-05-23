@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, useStore } from 'react-redux';
 import {
   Modal, Button, FormControl, InputGroup,
 } from 'react-bootstrap';
@@ -7,7 +7,8 @@ import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 
 // import getValidationSchema from '../../common/validation.js';
-import { renameList } from '../../slices/listsSlice.js';
+import { addList } from '../lists/listsSlice.js';
+import { changeActiveList } from '../uiSlice.js';
 
 const getValidationSchema = (names) => yup.object().shape({
   name: yup.string()
@@ -16,35 +17,40 @@ const getValidationSchema = (names) => yup.object().shape({
     .notOneOf(names, 'validation.exist'),
 });
 
-const generateOnSubmit = ({ onHide, dispatch, item: { id } }) => ({ name }) => {
-  dispatch(renameList({ name, id }));
+const generateOnSubmit = ({ onHide, dispatch, store }) => ({ name }) => {
+  // generate list id from last id saved in state
+  const { allIds } = store.getState().entities.lists;
+  const lastIdChunks = allIds[allIds.length - 1].split('_');
+  const lastIdNumber = Number(lastIdChunks[lastIdChunks.length - 1]);
+  const id = `list_${lastIdNumber + 1}`;
+  dispatch(addList({ name, id }));
+  dispatch(changeActiveList({ id }));
   onHide();
 };
 
-const getFiletredListNames = (idToRename) => (state) => Object.values(state.entities.lists.byId)
-  .filter(({ id }) => id !== idToRename)
-  .map(({ name }) => name);
+const getListNames = (state) => Object.values(state.entities.lists.byId).map(({ name }) => name);
 
-const Rename = ({ onHide, modalsState: { item } }) => {
-  const listNames = useSelector(getFiletredListNames(item.id));
+const Add = ({ onHide }) => {
+  const listNames = useSelector(getListNames);
   const modalRef = useRef();
   const dispatch = useDispatch();
+  const store = useStore();
   useEffect(() => {
-    modalRef.current.select();
+    modalRef.current.focus();
   }, []);
 
   return (
     <Modal show onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Rename List</Modal.Title>
+        <Modal.Title>Create List</Modal.Title>
       </Modal.Header>
       <Formik
         initialValues={{
-          name: item.name,
+          name: '',
         }}
         validationSchema={getValidationSchema(listNames)}
         onSubmit={generateOnSubmit({
-          onHide, dispatch, item,
+          onHide, dispatch, store,
         })}
       >
         {({
@@ -82,4 +88,4 @@ const Rename = ({ onHide, modalsState: { item } }) => {
   );
 };
 
-export default Rename;
+export default Add;

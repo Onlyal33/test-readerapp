@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-import { deleteItem } from '../../slices/itemsSlice.js';
+import { deleteItem } from '../../features/items/itemsSlice.js';
 
 const DeleteItem = ({ onHide, modalsState: { item } }) => {
   const modalRef = useRef();

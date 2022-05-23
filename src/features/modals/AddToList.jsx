@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 import _ from 'lodash';
 
-import { addItemToList } from '../../slices/listItemSlice.js';
+import { addItemToList } from '../items/listItemSlice.js';
 
 const getLists = (id) => (state) => {
   const listsIds = state.entities.lists.allIds;
