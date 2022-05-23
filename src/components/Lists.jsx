@@ -2,7 +2,10 @@ import {
   ButtonGroup, Button, Dropdown, Nav,
 } from 'react-bootstrap';
 import { shallowEqual, useSelector, useDispatch } from 'react-redux';
-import { changeActiveList, openModal, closeModal } from '../slices/uiSlice.js';
+import { clearSearchResults } from '../slices/searchResultsSlice.js';
+import {
+  changeActiveList, changeDisplayingItemType, openModal, closeModal,
+} from '../slices/uiSlice.js';
 import getModal from './modals/index.js';
 
 const renderModal = ({ modalsState, hideModal }) => {
@@ -49,7 +52,9 @@ const Lists = () => {
 
   const dispatch = useDispatch();
   const handleSelectList = (id) => () => {
+    dispatch(changeDisplayingItemType('library'));
     dispatch(changeActiveList({ id }));
+    dispatch(clearSearchResults({ id }));
   };
 
   const hideModal = () => dispatch(closeModal());

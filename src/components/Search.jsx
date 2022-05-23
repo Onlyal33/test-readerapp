@@ -1,43 +1,96 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import {
-  Form, Button, Row, Col, ButtonGroup, ButtonToolbar,
+  FormControl, Button, Row, Col, FloatingLabel, Container,
 } from 'react-bootstrap';
+import { Formik, Form, useField } from 'formik';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+
+import routes from '../routes';
+import { addItemToSearchResults, clearSearchResults } from '../slices/searchResultsSlice';
+import { changeActiveList, changeDisplayingItemType } from '../slices/uiSlice';
+
+const handleSubmit = (dispatch) => async (values, actions) => {
+  const filteredEntries = Object.entries(values).filter(([, value]) => value !== '');
+  const url = routes.search(Object.fromEntries(filteredEntries));
+  try {
+    const { data } = await axios.get(url);
+    dispatch(clearSearchResults());
+    actions.setSubmitting(false);
+    data.docs.forEach((item) => {
+      const { key: id, author_name: author } = item;
+      dispatch(addItemToSearchResults({ ...item, id, author }));
+    });
+    dispatch(changeDisplayingItemType('search'));
+    dispatch(changeActiveList({ id: null }));
+  } catch (e) {
+    actions.setSubmitting(false);
+    console.log(e);
+    actions.setErrors(e);
+  }
+};
+
+const SearchInput = ({ label, ...props }) => {
+  const [field] = useField(props);
+
+  return (
+    <FloatingLabel
+      label={label}
+    >
+      <FormControl {...field} {...props} placeholder="" type="text" aria-label={label} />
+    </FloatingLabel>
+  );
+};
+
 // eslint-disable-next-line arrow-body-style
 const Search = () => {
+  const dispatch = useDispatch();
   return (
-    <Form className="my-2">
-      <Row className="mb-2">
-        <Col>
-          <Form.Control placeholder="Author" />
-        </Col>
-        <Col>
-          <Form.Control placeholder="Title" />
-        </Col>
-      </Row>
-      <Row className="mb-2">
-        <Col>
-          <Form.Control placeholder="Subject" />
-        </Col>
-        <Col>
-          <Form.Control placeholder="Place" />
-        </Col>
-      </Row>
-      <Row className="mb-2">
-        <Col>
-          <Form.Control placeholder="Person" />
-        </Col>
-        <Col>
-          <Form.Control placeholder="Language" />
-        </Col>
-      </Row>
-      <ButtonToolbar className="justify-content-between">
-        <ButtonGroup className="me-2">
-          <Button variant="primary" type="submit">Search</Button>
-        </ButtonGroup>
-        <ButtonGroup>
-          <Button variant="outline-danger">Reset</Button>
-        </ButtonGroup>
-      </ButtonToolbar>
-    </Form>
+    <Formik
+      initialValues={{
+        author: '',
+        title: '',
+        subject: '',
+        place: '',
+        person: '',
+        language: '',
+      }}
+      onSubmit={handleSubmit(dispatch)}
+    >
+      {({ isSubmitting }) => (
+        <Form as={Container} className="my-2">
+          <Row className="mb-2">
+            <Col className="pe-1">
+              <SearchInput name="author" label="Author" disabled={isSubmitting} />
+            </Col>
+            <Col className="ps-1">
+              <SearchInput name="title" label="Title" disabled={isSubmitting} />
+            </Col>
+          </Row>
+          <Row className="mb-2">
+            <Col className="pe-1">
+              <SearchInput name="subject" label="Subject" disabled={isSubmitting} />
+            </Col>
+            <Col className="ps-1">
+              <SearchInput name="place" label="Place" disabled={isSubmitting} />
+            </Col>
+          </Row>
+          <Row className="mb-2">
+            <Col className="pe-1">
+              <SearchInput name="person" label="Person" disabled={isSubmitting} />
+            </Col>
+            <Col className="ps-1">
+              <SearchInput name="language" label="Language" disabled={isSubmitting} />
+            </Col>
+          </Row>
+          <Row className="mb-2">
+            <Col>
+              <Button variant="primary" type="submit" disabled={isSubmitting}>Search</Button>
+            </Col>
+          </Row>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

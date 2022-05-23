@@ -14,11 +14,11 @@ const Contents = () => {
 
   const { title, author, description } = activeItem;
   return (
-    <Card className="rounded-0 border-0 h-100">
-      <Card.Header>{author}</Card.Header>
+    <Card className="border-0 my-2 flex-grow-1">
+      <Card.Header>{author?.join(', ')}</Card.Header>
       <Card.Body>
         <Card.Title>{title}</Card.Title>
-        <Card.Text>{description}</Card.Text>
+        <Card.Text>{description?.value || description}</Card.Text>
         <Button variant="primary">Add</Button>
       </Card.Body>
     </Card>

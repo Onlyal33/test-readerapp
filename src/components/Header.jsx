@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Navbar, Container, Button,
+  Navbar, Button, Col,
 } from 'react-bootstrap';
 
 import { toggleSearchVisibility, toggleFilter } from '../slices/uiSlice';
@@ -19,19 +19,19 @@ const Header = () => {
   };
   return (
     <Navbar bg="light" className="shadow-sm">
-      <Container>
-        <Navbar.Brand className="me-auto">Reader App</Navbar.Brand>
+      <Col className="px-2" xs={2}>
+        <Navbar.Brand>Reader App</Navbar.Brand>
+      </Col>
+      <Col className="px-2" xs={5}>
         <Button onClick={handleClickFilter} variant="outline-primary">
-          Show
-          {' '}
-          {filteringStatus === 'unread' ? 'All' : 'Unread'}
+          {filteringStatus === 'unread' ? 'Show All' : 'Show Unread'}
         </Button>
+      </Col>
+      <Col className="px-2 d-flex" xs={5}>
         <Button onClick={handleClick} variant="outline-primary" className="ms-auto">
-          {searchVisibility === 'visible' ? 'Hide' : 'Show'}
-          {' '}
-          Search
+          {searchVisibility === 'visible' ? 'Hide Search' : 'Show Search'}
         </Button>
-      </Container>
+      </Col>
     </Navbar>
   );
 };

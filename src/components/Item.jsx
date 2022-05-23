@@ -41,13 +41,11 @@ const Item = ({ id: itemId }) => {
       <Dropdown as={ButtonGroup} className="rounded-1 d-flex">
         <Button onClick={handleSelectItem(itemId)} variant={variant} className="w-100 text-truncate">
           <Card.Title className="text-start text-truncate">{title}</Card.Title>
-          <Card.Subtitle className="text-start text-truncate">{author}</Card.Subtitle>
-          <Card.Text className="text-start text-truncate">{description}</Card.Text>
+          <Card.Subtitle className="text-start text-truncate">{author?.join(', ')}</Card.Subtitle>
+          <Card.Text className="text-start text-truncate">{description?.value || description}</Card.Text>
         </Button>
         <Dropdown.Toggle split variant={variant} />
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => showModal('addItem', item)}>Add to Library</Dropdown.Item>
-          <Dropdown.Item onClick={() => showModal('deleteItem', item)}>Delete from Library</Dropdown.Item>
           {isAddItemToListAvaliable ? <Dropdown.Item onClick={() => showModal('addToList', item)}>Add to List</Dropdown.Item> : null}
           {isRemoveItemFromListAvaliable ? <Dropdown.Item onClick={() => showModal('removeFromList', item)}>Remove from List</Dropdown.Item> : null}
           <Dropdown.Item onClick={() => toggleRead(itemId)}>
@@ -56,6 +54,7 @@ const Item = ({ id: itemId }) => {
             {item.isRead ? 'Unread' : 'Read'}
           </Dropdown.Item>
           <Dropdown.Item onClick={() => showModal('editNotes', item)}>Edit Notes</Dropdown.Item>
+          <Dropdown.Item onClick={() => showModal('deleteItem', item)}>Delete from Library</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </ListGroup.Item>

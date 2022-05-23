@@ -31,6 +31,9 @@ const uiSlice = createSlice({
     toggleFilter(state) {
       state.filteringStatus = state.filteringStatus === 'all' ? 'unread' : 'all';
     },
+    changeDisplayingItemType(state, action) {
+      state.displayingItemType = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -50,7 +53,13 @@ const uiSlice = createSlice({
 });
 
 export const {
-  changeActiveList, changeActiveItem, openModal, closeModal, toggleSearchVisibility, toggleFilter,
+  changeActiveList,
+  changeActiveItem,
+  openModal,
+  closeModal,
+  toggleSearchVisibility,
+  toggleFilter,
+  changeDisplayingItemType,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

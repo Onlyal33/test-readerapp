@@ -1,21 +1,33 @@
 import { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
+import axios from 'axios';
 
 import { addItem } from '../../slices/itemsSlice.js';
 import { addItemToList } from '../../slices/listItemSlice.js';
+import { updateItemInSearchResults } from '../../slices/searchResultsSlice.js';
+import routes from '../../routes.js';
 
-const getDefaultListId = (state) => state.enities.lists.byId[state.entities.lists.allIds[0]].id;
+const getDefaultListId = (state) => state.entities.lists.byId[state.entities.lists.allIds[0]].id;
 
 const AddItem = ({ onHide, modalsState: { item } }) => {
   const modalRef = useRef();
   const dispatch = useDispatch();
   const listId = useSelector(getDefaultListId);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!item.isItemDetalised) {
+      const url = routes.fetchBook(item.id);
+      try {
+        const { data } = await axios.get(url);
+        dispatch(updateItemInSearchResults(data));
+      } catch (err) {
+        console.log(err);
+      }
+    }
     dispatch(addItem(item));
-    dispatch(addItemToList({ itemId: item.id, listId, id: `${listId}_${item.Id}` }));
+    dispatch(addItemToList({ itemId: item.id, listId, id: `${listId}_${item.id}` }));
     onHide();
   };
 

@@ -7,39 +7,26 @@ import itemsReducer from './slices/itemsSlice.js';
 import listsReducer from './slices/listsSlice.js';
 import uiReducer from './slices/uiSlice.js';
 import listItemReducer from './slices/listItemSlice.js';
+import searchResultsReducer from './slices/searchResultsSlice.js';
 
 const initialize = () => {
+  const localState = (JSON.parse(localStorage.getItem('readerAppState')) ?? {});
+
   const store = configureStore({
     reducer: {
       entities: combineReducers({
         items: itemsReducer,
         lists: listsReducer,
         listItem: listItemReducer,
+        searchResults: searchResultsReducer,
       }),
       ui: uiReducer,
     },
     preloadedState: {
       entities: {
         items: {
-          byId: {
-            0: {
-              id: '0',
-              title: 'The Lord of The Rings',
-              author: 'J.R.R.Tolkien',
-              description: 'Best book ever',
-              isRead: true,
-              notes: '',
-            },
-            1: {
-              id: '1',
-              title: 'Dune',
-              author: 'F.Herbert',
-              description: 'They say it is best unread book ever',
-              isRead: false,
-              notes: '',
-            },
-          },
-          allIds: ['0', '1'],
+          byId: {},
+          allIds: [],
         },
         lists: {
           byId: {
@@ -48,36 +35,25 @@ const initialize = () => {
               name: 'Your Library',
               type: 'default',
             },
-            list_1: {
-              id: 'list_1',
-              name: 'Example list',
-              type: 'user',
-            },
           },
-          allIds: ['list_0', 'list_1'],
+          allIds: ['list_0'],
         },
         listItem: {
-          byId: {
-            0: {
-              id: 'list_0_0',
-              listId: 'list_0',
-              itemId: '0',
-            },
-            1: {
-              id: 'list_0_1',
-              listId: 'list_0',
-              itemId: '1',
-            },
-          },
-          allIds: ['list_0_0', 'list_0_1'],
+          byId: {},
+          allIds: [],
+        },
+        ...localState,
+        searchResults: {
+          byId: {},
+          allIds: [],
         },
       },
       ui: {
-        activeList: '0',
+        activeList: 'list_0',
         activeItem: null,
-        previousList: null,
         searchVisibility: 'invisible',
         filteringStatus: 'all',
+        displayingItemType: 'library',
         modals: { isOpen: false, type: null, item: null },
       },
     },
