@@ -14,17 +14,17 @@ const App = () => {
   const searchVisibility = useSelector((state) => state.ui.searchVisibility);
 
   return (
-    <Container className="d-flex flex-column vh-100 p-3">
+    <Container fluid className="d-flex flex-column vh-100 p-3">
       <Header />
       <Row className="rounded shadow m-0 overflow-hidden flex-grow-1">
         <Col xs={2} className="px-2 bg-secondary bg-opacity-10">
           <SaveButton />
           <Lists />
         </Col>
-        <Col xs={5} className="px-2 my-2 h-100 overflow-auto">
+        <Col xs={4} className="px-2 my-2 h-100 overflow-auto">
           <Items />
         </Col>
-        <Col xs={5} className="px-2 bg-secondary bg-opacity-10 h-100 d-flex flex-column">
+        <Col xs={6} className="px-2 bg-secondary bg-opacity-10 h-100 d-flex flex-column">
           {searchVisibility === 'visible' ? <Search /> : null}
           <Contents />
         </Col>

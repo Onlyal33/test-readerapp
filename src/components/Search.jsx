@@ -17,6 +17,9 @@ const handleSubmit = (dispatch) => async (values, actions) => {
     const { data } = await axios.get(url);
     dispatch(clearSearchResults());
     actions.setSubmitting(false);
+    const languageNames = new Intl.DisplayNames(['en'], {
+      type: 'language',
+    });
     data.docs.forEach((item) => {
       const {
         key: id,
@@ -31,7 +34,7 @@ const handleSubmit = (dispatch) => async (values, actions) => {
         id,
         author,
         firstPublishYear,
-        language,
+        language: language.map((el) => languageNames.of(el)),
         place,
         subject,
         title,
