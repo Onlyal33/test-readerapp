@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, useStore } from 'react-redux';
 import {
   Modal, Button, FormControl, InputGroup,
 } from 'react-bootstrap';
@@ -17,9 +17,12 @@ const getValidationSchema = (names) => yup.object().shape({
     .notOneOf(names, 'validation.exist'),
 });
 
-const generateOnSubmit = ({ onHide, dispatch }) => ({ name }) => {
-  // TODO generate id from state
-  const id = `list_${name}`;
+const generateOnSubmit = ({ onHide, dispatch, store }) => ({ name }) => {
+  // generate list id from last id saved in state
+  const { allIds } = store.getState().entities.lists;
+  const lastIdChunks = allIds[allIds.length - 1].split('_');
+  const lastIdNumber = Number(lastIdChunks[lastIdChunks.length - 1]);
+  const id = `list_${lastIdNumber + 1}`;
   dispatch(addList({ name, id }));
   dispatch(changeActiveList({ id }));
   onHide();
@@ -31,6 +34,7 @@ const Add = ({ onHide }) => {
   const listNames = useSelector(getListNames);
   const modalRef = useRef();
   const dispatch = useDispatch();
+  const store = useStore();
   useEffect(() => {
     modalRef.current.focus();
   }, []);
@@ -46,7 +50,7 @@ const Add = ({ onHide }) => {
         }}
         validationSchema={getValidationSchema(listNames)}
         onSubmit={generateOnSubmit({
-          onHide, dispatch,
+          onHide, dispatch, store,
         })}
       >
         {({
