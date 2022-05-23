@@ -25,7 +25,10 @@ const SearchItem = ({ item }) => {
       const url = routes.fetchBook(id);
       try {
         const { data } = await axios.get(url);
-        dispatch(updateItemInSearchResults(data));
+        dispatch(updateItemInSearchResults({
+          id: item.id,
+          description: data.description?.value ?? data.description,
+        }));
       } catch (e) {
         console.log(e);
       }
@@ -42,7 +45,7 @@ const SearchItem = ({ item }) => {
         <Button onClick={handleSelectItem(itemId)} variant={variant} className="w-100 text-truncate">
           <Card.Title className="text-start text-truncate">{title}</Card.Title>
           <Card.Subtitle className="text-start text-truncate">{author?.join(', ')}</Card.Subtitle>
-          <Card.Text className="text-start text-truncate">{description?.value || description}</Card.Text>
+          <Card.Text className="text-start text-truncate">{description}</Card.Text>
         </Button>
         <Dropdown.Toggle split variant={variant} />
         <Dropdown.Menu>

@@ -42,7 +42,7 @@ const Item = ({ id: itemId }) => {
         <Button onClick={handleSelectItem(itemId)} variant={variant} className="w-100 text-truncate">
           <Card.Title className="text-start text-truncate">{title}</Card.Title>
           <Card.Subtitle className="text-start text-truncate">{author?.join(', ')}</Card.Subtitle>
-          <Card.Text className="text-start text-truncate">{description?.value || description}</Card.Text>
+          <Card.Text className="text-start text-truncate">{description}</Card.Text>
         </Button>
         <Dropdown.Toggle split variant={variant} />
         <Dropdown.Menu>

@@ -17,11 +17,14 @@ const AddItem = ({ onHide, modalsState: { item } }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!item.isItemDetalised) {
+    if (!item.detalised) {
       const url = routes.fetchBook(item.id);
       try {
         const { data } = await axios.get(url);
-        dispatch(updateItemInSearchResults(data));
+        dispatch(updateItemInSearchResults({
+          id: item.id,
+          description: data.description?.value || data.description,
+        }));
       } catch (err) {
         console.log(err);
       }

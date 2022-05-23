@@ -18,8 +18,24 @@ const handleSubmit = (dispatch) => async (values, actions) => {
     dispatch(clearSearchResults());
     actions.setSubmitting(false);
     data.docs.forEach((item) => {
-      const { key: id, author_name: author } = item;
-      dispatch(addItemToSearchResults({ ...item, id, author }));
+      const {
+        key: id,
+        author_name: author,
+        first_publish_year: firstPublishYear,
+        language = [],
+        place = [],
+        subject = [],
+        title,
+      } = item;
+      dispatch(addItemToSearchResults({
+        id,
+        author,
+        firstPublishYear,
+        language,
+        place,
+        subject,
+        title,
+      }));
     });
     dispatch(changeDisplayingItemType('search'));
     dispatch(changeActiveList({ id: null }));

@@ -10,8 +10,8 @@ const searchResults = createSlice({
       state.allIds.push(action.payload.id);
     },
     updateItemInSearchResults(state, action) {
-      state.byId[action.payload.key] = {
-        ...state.byId[action.payload.key],
+      state.byId[action.payload.id] = {
+        ...state.byId[action.payload.id],
         ...action.payload,
         detalised: true,
       };
