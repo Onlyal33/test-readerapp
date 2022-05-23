@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 
 import routes from '../routes';
 import { addItemToSearchResults, clearSearchResults } from '../slices/searchResultsSlice';
-import { changeActiveList, changeDisplayingItemType } from '../slices/uiSlice';
+import { changeActiveList, changeDisplayingItemType, setSearchResultsNumber } from '../slices/uiSlice';
 
 const handleSubmit = (dispatch) => async (values, actions) => {
   const filteredEntries = Object.entries(values).filter(([, value]) => value !== '');
@@ -40,6 +40,7 @@ const handleSubmit = (dispatch) => async (values, actions) => {
         title,
       }));
     });
+    dispatch(setSearchResultsNumber(data.numFound));
     dispatch(changeDisplayingItemType('search'));
     dispatch(changeActiveList({ id: null }));
   } catch (e) {

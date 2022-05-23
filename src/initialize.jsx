@@ -55,6 +55,7 @@ const initialize = () => {
         filteringStatus: 'all',
         displayingItemType: 'library',
         modals: { isOpen: false, type: null, item: null },
+        searchResultsNumber: null,
       },
     },
   });

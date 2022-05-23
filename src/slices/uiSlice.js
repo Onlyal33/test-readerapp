@@ -34,6 +34,9 @@ const uiSlice = createSlice({
     changeDisplayingItemType(state, action) {
       state.displayingItemType = action.payload;
     },
+    setSearchResultsNumber(state, action) {
+      state.searchResultsNumber = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -60,6 +63,7 @@ export const {
   toggleSearchVisibility,
   toggleFilter,
   changeDisplayingItemType,
+  setSearchResultsNumber,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

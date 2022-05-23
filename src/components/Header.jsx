@@ -9,6 +9,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const searchVisibility = useSelector((state) => state.ui.searchVisibility);
   const filteringStatus = useSelector((state) => state.ui.filteringStatus);
+  const searchResultsNumber = useSelector((state) => state.ui.searchResultsNumber);
+  const displayingItemType = useSelector((state) => state.ui.displayingItemType);
   const handleClick = (e) => {
     e.preventDefault();
     dispatch(toggleSearchVisibility());
@@ -22,12 +24,22 @@ const Header = () => {
       <Col className="px-2" xs={2}>
         <Navbar.Brand>Reader App</Navbar.Brand>
       </Col>
-      <Col className="px-2" xs={5}>
-        <Button onClick={handleClickFilter} variant="outline-primary">
-          {filteringStatus === 'unread' ? 'Show All' : 'Show Unread'}
-        </Button>
+      <Col className="px-2" xs={4}>
+        {displayingItemType === 'library'
+          ? (
+            <Button onClick={handleClickFilter} variant="outline-primary">
+              {filteringStatus === 'unread' ? 'Show All' : 'Show Unread'}
+            </Button>
+          )
+          : (
+            <div className="border-b">
+              {searchResultsNumber}
+              {' '}
+              items found
+            </div>
+          )}
       </Col>
-      <Col className="px-2 d-flex" xs={5}>
+      <Col className="px-2 d-flex" xs={6}>
         <Button onClick={handleClick} variant="outline-primary" className="ms-auto">
           {searchVisibility === 'visible' ? 'Hide Search' : 'Show Search'}
         </Button>
