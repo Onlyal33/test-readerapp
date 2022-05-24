@@ -1,64 +1,13 @@
 import {
-  ButtonGroup, Button, Dropdown, Nav,
+  Button, Nav,
 } from 'react-bootstrap';
-import { shallowEqual, useSelector, useDispatch } from 'react-redux';
-import { clearSearchResults } from '../search/searchResultsSlice.js';
-import {
-  changeActiveList, changeDisplayingItemType, openModal, closeModal,
-} from '../uiSlice.js';
-import getModal from '../modals/index.js';
-
-const renderModal = ({ modalsState, hideModal }) => {
-  if (!modalsState.type) {
-    return null;
-  }
-
-  const Component = getModal(modalsState.type);
-  return <Component modalsState={modalsState} onHide={hideModal} />;
-};
-
-const renderList = ({
-  list, activeList, handleSelectList, showModal,
-}) => {
-  const { id, name } = list;
-  const variant = id === activeList ? 'outline-secondary' : null;
-
-  if (list.type === 'default') {
-    return (
-      <Nav.Item key={id} className="w-100">
-        <Button onClick={handleSelectList(id)} variant={variant} className="w-100 text-start text-truncate fw-bold">{name}</Button>
-      </Nav.Item>
-    );
-  }
-
-  return (
-    <Nav.Item key={id} className="w-100">
-      <Dropdown as={ButtonGroup} className="d-flex">
-        <Button onClick={handleSelectList(id)} variant={variant} className="w-100 border-end-0 text-start text-truncate">{name}</Button>
-        <Dropdown.Toggle split variant={variant} className="border-start-0" />
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={() => showModal('delete', list)}>Remove List</Dropdown.Item>
-          <Dropdown.Item onClick={() => showModal('rename', list)}>Rename List</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </Nav.Item>
-  );
-};
+import { shallowEqual, useSelector } from 'react-redux';
+import List from './List.jsx';
+import useModal from '../../common/useModal.js';
 
 const Lists = () => {
-  const lists = useSelector((state) => Object.values(state.entities.lists.byId), shallowEqual);
-  const activeList = useSelector((state) => state.ui.activeList);
-  const modalsState = useSelector((state) => state.ui.modals);
-
-  const dispatch = useDispatch();
-  const handleSelectList = (id) => () => {
-    dispatch(changeDisplayingItemType('library'));
-    dispatch(changeActiveList({ id }));
-    dispatch(clearSearchResults({ id }));
-  };
-
-  const hideModal = () => dispatch(closeModal());
-  const showModal = (type, item = null) => dispatch(openModal({ type, item }));
+  const listsIds = useSelector((state) => state.entities.lists.allIds, shallowEqual);
+  const { showModal } = useModal();
 
   return (
     <>
@@ -73,10 +22,7 @@ const Lists = () => {
         </Button>
       </div>
       <Nav>
-        {lists.map((list) => renderList({
-          list, activeList, handleSelectList, showModal,
-        }))}
-        {renderModal({ modalsState, hideModal })}
+        {listsIds.map((id) => <List key={id} id={id} />)}
       </Nav>
     </>
   );

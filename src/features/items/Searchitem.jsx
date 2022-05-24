@@ -2,47 +2,38 @@ import {
   Button, ButtonGroup, Card, Dropdown, ListGroup,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 
-import routes from '../../common/routes.js';
-import { changeActiveItem, openModal } from '../uiSlice.js';
-import { updateItemInSearchResults } from '../search/searchResultsSlice.js';
+import useModal from '../../common/useModal.js';
+import useAPI from '../../common/useAPI.js';
+import { changeActiveItem } from '../uiSlice.js';
 
-const SearchItem = ({ item }) => {
-  const { id: itemId } = item;
-  const isItemInLibrary = useSelector((state) => state.entities.items.allIds.includes(itemId));
+const SearchItem = ({ id }) => {
+  const isItemInLibrary = useSelector((state) => state.entities.items.allIds.includes(id));
   const isItemDetalised = useSelector(
-    (state) => state.entities.searchResults.byId[itemId].detalised,
+    (state) => state.entities.searchResults.byId[id].detalised,
   );
+  const isItemActive = useSelector((state) => state.ui.activeItem === id);
+  const item = useSelector((state) => state.entities.searchResults.byId[id]);
   const {
     title, author, firstPublishYear,
   } = item;
-
-  const activeItemId = useSelector((state) => state.ui.activeItem);
   const dispatch = useDispatch();
-  const handleSelectItem = (id) => async () => {
+  const { showModal } = useModal();
+  const { handleFetch } = useAPI();
+
+  const handleSelectItem = async () => {
     if (!isItemDetalised) {
-      const url = routes.fetchBook(id);
-      try {
-        const { data } = await axios.get(url);
-        dispatch(updateItemInSearchResults({
-          id: item.id,
-          description: data.description?.value ?? data.description,
-        }));
-      } catch (e) {
-        console.log(e);
-      }
+      await handleFetch(id);
     }
     dispatch(changeActiveItem({ id }));
   };
-  const showModal = (type) => dispatch(openModal({ type, item }));
 
-  const variant = itemId === activeItemId ? 'primary' : null;
+  const variant = isItemActive ? 'primary' : null;
 
   return (
     <ListGroup.Item className="rounded-1 w-100 p-0">
       <Dropdown as={ButtonGroup} className="rounded-1 d-flex">
-        <Button onClick={handleSelectItem(itemId)} variant={variant} className="w-100 text-truncate">
+        <Button onClick={handleSelectItem} variant={variant} className="w-100 text-truncate">
           <Card.Title aria-label="title" className="text-start text-truncate">{title}</Card.Title>
           <Card.Subtitle aria-label="author" className="text-start text-truncate">
             by

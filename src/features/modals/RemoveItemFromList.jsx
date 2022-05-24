@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 
+import useModal from '../../common/useModal.js';
 import { removeItemFromList } from '../items/listItemSlice.js';
 
 const getLists = (id) => (state) => {
@@ -14,20 +15,17 @@ const getLists = (id) => (state) => {
   return listsWithItem;
 };
 
-const RemoveFromList = ({ onHide, modalsState: { item } }) => {
+const RemoveItemFromList = ({ item }) => {
   const lists = useSelector(getLists(item.id));
-  const [state, setState] = useState({ listId: lists[0].id, itemId: item.id });
+  const [listId, setListId] = useState(lists[0].id);
   const modalRef = useRef();
   const dispatch = useDispatch();
-
-  const handleChange = (e) => {
-    setState({ ...state, listId: e.target.value });
-  };
+  const { hideModal } = useModal();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(removeItemFromList(state));
-    onHide();
+    dispatch(removeItemFromList({ listId, itemId: item.id }));
+    hideModal();
   };
 
   useEffect(() => {
@@ -35,7 +33,7 @@ const RemoveFromList = ({ onHide, modalsState: { item } }) => {
   }, []);
 
   return (
-    <Modal show onHide={onHide}>
+    <Modal show onHide={hideModal}>
       <Modal.Header closeButton>
         <Modal.Title>
           Remove
@@ -51,14 +49,14 @@ const RemoveFromList = ({ onHide, modalsState: { item } }) => {
             id="listId"
             ref={modalRef}
             aria-label="select list"
-            value={state.id}
-            onChange={handleChange}
+            value={listId}
+            onChange={(e) => setListId(e.target.value)}
           >
             {lists.map(({ id, name }) => <option value={id} key={id}>{name}</option>)}
           </Form.Select>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={onHide}>Cancel</Button>
+          <Button variant="secondary" onClick={hideModal}>Cancel</Button>
           <Button variant="primary" type="submit">OK</Button>
         </Modal.Footer>
       </Form>
@@ -66,4 +64,4 @@ const RemoveFromList = ({ onHide, modalsState: { item } }) => {
   );
 };
 
-export default RemoveFromList;
+export default RemoveItemFromList;

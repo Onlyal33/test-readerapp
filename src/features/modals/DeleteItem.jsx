@@ -2,16 +2,18 @@ import { useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-import { deleteItem } from '../../features/items/itemsSlice.js';
+import useModal from '../../common/useModal.js';
+import { deleteItem } from '../items/itemsSlice.js';
 
-const DeleteItem = ({ onHide, modalsState: { item } }) => {
+const DeleteItem = ({ item }) => {
   const modalRef = useRef();
   const dispatch = useDispatch();
+  const { hideModal } = useModal();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(deleteItem(item));
-    onHide();
+    hideModal();
   };
 
   useEffect(() => {
@@ -19,7 +21,7 @@ const DeleteItem = ({ onHide, modalsState: { item } }) => {
   }, []);
 
   return (
-    <Modal show onHide={onHide}>
+    <Modal show onHide={hideModal}>
       <Modal.Header closeButton>
         <Modal.Title>Delete from library</Modal.Title>
       </Modal.Header>
@@ -34,7 +36,7 @@ const DeleteItem = ({ onHide, modalsState: { item } }) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={onHide}>Cancel</Button>
+          <Button variant="secondary" onClick={hideModal}>Cancel</Button>
           <Button variant="danger" type="submit" ref={modalRef}>OK</Button>
         </Modal.Footer>
       </Form>

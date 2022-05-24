@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 import _ from 'lodash';
 
+import useModal from '../../common/useModal.js';
 import { addItemToList } from '../items/listItemSlice.js';
 
 const getLists = (id) => (state) => {
@@ -14,28 +15,27 @@ const getLists = (id) => (state) => {
   return listsWithoutItemsIds.map((listId) => state.entities.lists.byId[listId]);
 };
 
-const AddToList = ({ onHide, modalsState: { item } }) => {
+const generateOnSubmit = ({
+  hideModal, dispatch, listId, item,
+}) => async (e) => {
+  e.preventDefault();
+  dispatch(addItemToList({ listId, itemId: item.id }));
+  hideModal();
+};
+
+const AddItemToList = ({ item }) => {
   const lists = useSelector(getLists(item.id));
-  const [state, setState] = useState({ listId: lists[0].id, itemId: item.id });
+  const [listId, setListId] = useState(lists[0].id);
   const modalRef = useRef();
   const dispatch = useDispatch();
-
-  const handleChange = (e) => {
-    setState({ ...state, listId: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(addItemToList({ ...state, id: `${state.listId}_${state.itemId}` }));
-    onHide();
-  };
+  const { hideModal } = useModal();
 
   useEffect(() => {
     modalRef.current.focus();
   }, []);
 
   return (
-    <Modal show onHide={onHide}>
+    <Modal show onHide={hideModal}>
       <Modal.Header closeButton>
         <Modal.Title>
           Add
@@ -45,20 +45,23 @@ const AddToList = ({ onHide, modalsState: { item } }) => {
           to List
         </Modal.Title>
       </Modal.Header>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={generateOnSubmit({
+        hideModal, dispatch, listId, item,
+      })}
+      >
         <Modal.Body>
           <Form.Select
             id="listId"
             ref={modalRef}
             aria-label="select list"
-            value={state.id}
-            onChange={handleChange}
+            value={listId}
+            onChange={(e) => setListId(e.target.value)}
           >
             {lists.map(({ id, name }) => <option value={id} key={id}>{name}</option>)}
           </Form.Select>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={onHide}>Cancel</Button>
+          <Button variant="secondary" onClick={hideModal}>Cancel</Button>
           <Button variant="primary" type="submit">OK</Button>
         </Modal.Footer>
       </Form>
@@ -66,4 +69,4 @@ const AddToList = ({ onHide, modalsState: { item } }) => {
   );
 };
 
-export default AddToList;
+export default AddItemToList;

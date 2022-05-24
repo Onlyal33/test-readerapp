@@ -4,20 +4,13 @@ import {
   Modal, Button, FormControl, InputGroup,
 } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
-import * as yup from 'yup';
 
-// import getValidationSchema from '../../common/validation.js';
+import useModal from '../../common/useModal.js';
+import useValidation from '../../common/useValidation.js';
 import { addList } from '../lists/listsSlice.js';
 import { changeActiveList } from '../uiSlice.js';
 
-const getValidationSchema = (names) => yup.object().shape({
-  name: yup.string()
-    .trim()
-    .required('validation.required')
-    .notOneOf(names, 'validation.exist'),
-});
-
-const generateOnSubmit = ({ onHide, dispatch, store }) => ({ name }) => {
+const generateOnSubmit = ({ hideModal, dispatch, store }) => ({ name }) => {
   // generate list id from last id saved in state
   const { allIds } = store.getState().entities.lists;
   const lastIdChunks = allIds[allIds.length - 1].split('_');
@@ -25,22 +18,24 @@ const generateOnSubmit = ({ onHide, dispatch, store }) => ({ name }) => {
   const id = `list_${lastIdNumber + 1}`;
   dispatch(addList({ name, id }));
   dispatch(changeActiveList({ id }));
-  onHide();
+  hideModal();
 };
 
 const getListNames = (state) => Object.values(state.entities.lists.byId).map(({ name }) => name);
 
-const Add = ({ onHide }) => {
+const AddList = () => {
   const listNames = useSelector(getListNames);
   const modalRef = useRef();
   const dispatch = useDispatch();
   const store = useStore();
+  const validationSchema = useValidation(listNames);
+  const { hideModal } = useModal();
   useEffect(() => {
     modalRef.current.focus();
   }, []);
 
   return (
-    <Modal show onHide={onHide}>
+    <Modal show onHide={hideModal}>
       <Modal.Header closeButton>
         <Modal.Title>Create List</Modal.Title>
       </Modal.Header>
@@ -48,9 +43,9 @@ const Add = ({ onHide }) => {
         initialValues={{
           name: '',
         }}
-        validationSchema={getValidationSchema(listNames)}
+        validationSchema={validationSchema}
         onSubmit={generateOnSubmit({
-          onHide, dispatch, store,
+          hideModal, dispatch, store,
         })}
       >
         {({
@@ -78,7 +73,7 @@ const Add = ({ onHide }) => {
               </FormControl.Feedback>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={onHide}>Cancel</Button>
+              <Button variant="secondary" onClick={hideModal}>Cancel</Button>
               <Button variant="primary" type="submit" disabled={isSubmitting}>OK</Button>
             </Modal.Footer>
           </Form>
@@ -88,4 +83,4 @@ const Add = ({ onHide }) => {
   );
 };
 
-export default Add;
+export default AddList;

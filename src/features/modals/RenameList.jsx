@@ -4,37 +4,32 @@ import {
   Modal, Button, FormControl, InputGroup,
 } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
-import * as yup from 'yup';
 
-// import getValidationSchema from '../../common/validation.js';
-import { renameList } from '../../features/lists/listsSlice.js';
+import useModal from '../../common/useModal.js';
+import useValidation from '../../common/useValidation.js';
+import { renameList } from '../lists/listsSlice.js';
 
-const getValidationSchema = (names) => yup.object().shape({
-  name: yup.string()
-    .trim()
-    .required('validation.required')
-    .notOneOf(names, 'validation.exist'),
-});
-
-const generateOnSubmit = ({ onHide, dispatch, item: { id } }) => ({ name }) => {
+const generateOnSubmit = ({ hideModal, dispatch, item: { id } }) => ({ name }) => {
   dispatch(renameList({ name, id }));
-  onHide();
+  hideModal();
 };
 
 const getFiletredListNames = (idToRename) => (state) => Object.values(state.entities.lists.byId)
   .filter(({ id }) => id !== idToRename)
   .map(({ name }) => name);
 
-const Rename = ({ onHide, modalsState: { item } }) => {
+const RenameList = ({ item }) => {
   const listNames = useSelector(getFiletredListNames(item.id));
   const modalRef = useRef();
   const dispatch = useDispatch();
+  const validationSchema = useValidation(listNames);
+  const { hideModal } = useModal();
   useEffect(() => {
     modalRef.current.select();
   }, []);
 
   return (
-    <Modal show onHide={onHide}>
+    <Modal show onHide={hideModal}>
       <Modal.Header closeButton>
         <Modal.Title>Rename List</Modal.Title>
       </Modal.Header>
@@ -42,9 +37,9 @@ const Rename = ({ onHide, modalsState: { item } }) => {
         initialValues={{
           name: item.name,
         }}
-        validationSchema={getValidationSchema(listNames)}
+        validationSchema={validationSchema}
         onSubmit={generateOnSubmit({
-          onHide, dispatch, item,
+          hideModal, dispatch, item,
         })}
       >
         {({
@@ -72,7 +67,7 @@ const Rename = ({ onHide, modalsState: { item } }) => {
               </FormControl.Feedback>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={onHide}>Cancel</Button>
+              <Button variant="secondary" onClick={hideModal}>Cancel</Button>
               <Button variant="primary" type="submit" disabled={isSubmitting}>OK</Button>
             </Modal.Footer>
           </Form>
@@ -82,4 +77,4 @@ const Rename = ({ onHide, modalsState: { item } }) => {
   );
 };
 
-export default Rename;
+export default RenameList;

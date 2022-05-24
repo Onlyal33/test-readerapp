@@ -13,8 +13,10 @@ const listItemSlice = createSlice({
       state.allIds = action.payload.allIds;
     },
     addItemToList(state, action) {
-      state.byId[action.payload.id] = action.payload;
-      state.allIds.push(action.payload.id);
+      const { itemId, listId } = action.payload;
+      const id = `${listId}_${itemId}`;
+      state.byId[action.payload.id] = { id, listId, itemId };
+      state.allIds.push(id);
     },
     removeItemFromList(state, action) {
       const { itemId, listId } = action.payload;

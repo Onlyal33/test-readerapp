@@ -25,7 +25,7 @@ const uiSlice = createSlice({
     changeActiveItem(state, action) {
       state.activeItem = action.payload.id;
     },
-    toggleSearchVisibility(state) {
+    toggleAdvancedSearchVisibility(state) {
       state.searchVisibility = state.searchVisibility === 'visible' ? 'invisible' : 'visible';
     },
     toggleFilter(state) {
@@ -34,8 +34,9 @@ const uiSlice = createSlice({
     changeDisplayingItemType(state, action) {
       state.displayingItemType = action.payload;
     },
-    setSearchResultsNumber(state, action) {
-      state.searchResultsNumber = action.payload;
+    searchCompleted(state, action) {
+      state.displayingItemType = action.payload.displayingItemType;
+      state.searchResultsNumber = action.payload.searchResultsNumber;
     },
   },
   extraReducers: (builder) => {
@@ -60,10 +61,10 @@ export const {
   changeActiveItem,
   openModal,
   closeModal,
-  toggleSearchVisibility,
+  toggleAdvancedSearchVisibility,
   toggleFilter,
   changeDisplayingItemType,
-  setSearchResultsNumber,
+  searchCompleted,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

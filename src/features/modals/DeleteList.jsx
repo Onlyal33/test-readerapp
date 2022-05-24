@@ -2,24 +2,26 @@ import { useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, Modal, Button } from 'react-bootstrap';
 
-import { deleteList } from '../../features/lists/listsSlice.js';
+import useModal from '../../common/useModal.js';
+import { deleteList } from '../lists/listsSlice.js';
 
-const generateOnSubmit = ({ onHide, dispatch, item }) => (e) => {
+const generateOnSubmit = ({ hideModal, dispatch, item }) => (e) => {
   e.preventDefault();
   dispatch(deleteList(item));
-  onHide();
+  hideModal();
 };
 
-const Delete = ({ onHide, modalsState: { item } }) => {
+const DeleteList = ({ item }) => {
   const { name } = item;
   const modalRef = useRef();
   const dispatch = useDispatch();
+  const { hideModal } = useModal();
   useEffect(() => {
     modalRef.current.focus();
   }, []);
 
   return (
-    <Modal show onHide={onHide}>
+    <Modal show onHide={hideModal}>
       <Modal.Header closeButton>
         <Modal.Title>Delete List</Modal.Title>
       </Modal.Header>
@@ -32,10 +34,10 @@ const Delete = ({ onHide, modalsState: { item } }) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>Cancel</Button>
+        <Button variant="secondary" onClick={hideModal}>Cancel</Button>
         <Form
           onSubmit={generateOnSubmit({
-            dispatch, onHide, item,
+            dispatch, hideModal, item,
           })}
         >
           <Form.Control
@@ -52,4 +54,4 @@ const Delete = ({ onHide, modalsState: { item } }) => {
   );
 };
 
-export default Delete;
+export default DeleteList;

@@ -3,7 +3,7 @@ const host = 'http://openlibrary.org';
 export default {
   search: (data) => {
     const url = new URL('search.json', host);
-    url.search = new URLSearchParams({ q: data });
+    url.search = data.all ? new URLSearchParams({ q: data.all }) : null;
     return url;
   },
   advancedSearch: (data) => {

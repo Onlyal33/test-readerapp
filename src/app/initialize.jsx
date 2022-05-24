@@ -32,7 +32,7 @@ const initialize = () => {
           byId: {
             list_0: {
               id: 'list_0',
-              name: 'Your Library',
+              name: 'Library',
               type: 'default',
             },
           },

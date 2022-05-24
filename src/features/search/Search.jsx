@@ -1,117 +1,46 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import {
-  FormControl, Button, Row, Col, FloatingLabel, Container,
+  Button, Container, InputGroup,
 } from 'react-bootstrap';
-import { Formik, Form, useField } from 'formik';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { Formik, Form } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
 
-import routes from '../../common/routes';
-import { addItemToSearchResults, clearSearchResults } from './searchResultsSlice';
-import { changeActiveList, changeDisplayingItemType, setSearchResultsNumber } from '../uiSlice';
+import SearchInput from './SearchInput.jsx';
+import useAPI from '../../common/useAPI.js';
+import { toggleAdvancedSearchVisibility } from '../uiSlice.js';
 
-const handleSubmit = (dispatch) => async (values, actions) => {
-  const filteredEntries = Object.entries(values).filter(([, value]) => value !== '');
-  const url = routes.advancedSearch(Object.fromEntries(filteredEntries));
-  try {
-    const { data } = await axios.get(url);
-    dispatch(clearSearchResults());
-    actions.setSubmitting(false);
-    const languageNames = new Intl.DisplayNames(['en'], {
-      type: 'language',
-    });
-    data.docs.forEach((item) => {
-      const {
-        key: id,
-        author_name: author,
-        first_publish_year: firstPublishYear,
-        language = [],
-        place = [],
-        subject = [],
-        title,
-      } = item;
-      dispatch(addItemToSearchResults({
-        id,
-        author,
-        firstPublishYear,
-        language: language.map((el) => languageNames.of(el)),
-        place,
-        subject,
-        title,
-      }));
-    });
-    dispatch(setSearchResultsNumber(data.numFound));
-    dispatch(changeDisplayingItemType('search'));
-    dispatch(changeActiveList({ id: null }));
-  } catch (e) {
-    actions.setSubmitting(false);
-    console.log(e);
-    actions.setErrors(e);
-  }
-};
-
-const SearchInput = ({ label, ...props }) => {
-  const [field] = useField(props);
-
-  return (
-    <FloatingLabel
-      label={label}
-    >
-      <FormControl {...field} {...props} placeholder="" type="text" aria-label={label} />
-    </FloatingLabel>
-  );
-};
-
-// eslint-disable-next-line arrow-body-style
 const Search = () => {
   const dispatch = useDispatch();
-  return (
+  const searchVisibility = useSelector((state) => state.ui.searchVisibility);
+  const { handleSearch } = useAPI('search');
+
+  const toggleAdvancedSearch = (e) => {
+    e.preventDefault();
+    dispatch(toggleAdvancedSearchVisibility());
+  };
+
+  return searchVisibility !== 'visible' ? (
     <Formik
       initialValues={{
-        author: '',
-        title: '',
-        subject: '',
-        place: '',
-        person: '',
-        language: '',
+        all: '',
       }}
-      onSubmit={handleSubmit(dispatch)}
+      onSubmit={handleSearch}
     >
       {({ isSubmitting }) => (
-        <Form as={Container} className="my-2">
-          <Row className="mb-2">
-            <Col className="pe-1">
-              <SearchInput name="author" label="Author" disabled={isSubmitting} />
-            </Col>
-            <Col className="ps-1">
-              <SearchInput name="title" label="Title" disabled={isSubmitting} />
-            </Col>
-          </Row>
-          <Row className="mb-2">
-            <Col className="pe-1">
-              <SearchInput name="subject" label="Subject" disabled={isSubmitting} />
-            </Col>
-            <Col className="ps-1">
-              <SearchInput name="place" label="Place" disabled={isSubmitting} />
-            </Col>
-          </Row>
-          <Row className="mb-2">
-            <Col className="pe-1">
-              <SearchInput name="person" label="Person" disabled={isSubmitting} />
-            </Col>
-            <Col className="ps-1">
-              <SearchInput name="language" label="Language" disabled={isSubmitting} />
-            </Col>
-          </Row>
-          <Row className="mb-2">
-            <Col>
-              <Button variant="primary" type="submit" disabled={isSubmitting}>Search</Button>
-            </Col>
-          </Row>
+        <Form as={Container} className="flex-grow-1">
+          <InputGroup>
+            <SearchInput name="all" disabled={isSubmitting} />
+            <Button variant="primary" type="submit" disabled={isSubmitting}>Search</Button>
+            <Button onClick={toggleAdvancedSearch} variant="outline-primary">Show Advanced</Button>
+          </InputGroup>
         </Form>
       )}
     </Formik>
-  );
+  )
+    : (
+      <Button onClick={toggleAdvancedSearch} variant="outline-primary" className="ms-auto text-truncate">
+        Hide Advanced Search
+      </Button>
+    );
 };
 
 export default Search;
