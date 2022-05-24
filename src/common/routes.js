@@ -1,4 +1,4 @@
-const host = 'http://openlibrary.org';
+const host = 'https://openlibrary.org';
 
 export default {
   search: (data) => {
