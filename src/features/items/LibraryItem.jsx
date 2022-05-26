@@ -2,8 +2,8 @@ import {
   Button, ButtonGroup, Card, Dropdown, ListGroup,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleReadStatus } from './itemsSlice.js';
-import { changeActiveItem } from '../uiSlice.js';
+import { readStatusToggled } from './itemsSlice.js';
+import { activeItemChanged } from '../uiSlice.js';
 import useModal from '../../common/useModal.js';
 
 const hasListsToAddTo = (id) => (state) => {
@@ -30,8 +30,8 @@ const LibraryItem = ({ id }) => {
 
   const dispatch = useDispatch();
   const { showModal } = useModal();
-  const handleSelectItem = () => dispatch(changeActiveItem({ id }));
-  const toggleRead = () => dispatch(toggleReadStatus({ id }));
+  const handleSelectItem = () => dispatch(activeItemChanged({ id }));
+  const toggleRead = () => dispatch(readStatusToggled({ id }));
 
   const variant = isItemActive ? 'primary' : null;
 

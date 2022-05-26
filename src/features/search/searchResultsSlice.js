@@ -5,28 +5,36 @@ const searchResults = createSlice({
   name: 'searchResults',
   initialState: {},
   reducers: {
-    addItemToSearchResults(state, action) {
-      state.byId[action.payload.id] = action.payload;
-      state.allIds.push(action.payload.id);
+    searchCompleted(state, action) {
+      const byId = {};
+      const allIds = [];
+      action.payload.items.forEach((item) => {
+        byId[item.id] = item;
+        allIds.push(item.id);
+      });
+      state.byId = byId;
+      state.allIds = allIds;
     },
-    updateItemInSearchResults(state, action) {
+    itemUpdatedInSearchResults(state, action) {
       state.byId[action.payload.id] = {
         ...state.byId[action.payload.id],
         ...action.payload,
         detalised: true,
       };
     },
-    clearSearchResults(state) {
-      state.byId = {};
-      state.allIds = [];
+    searchHidden(state) {
+      if (state.allIds.length > 0) {
+        state.byId = {};
+        state.allIds = [];
+      }
     },
   },
 });
 
 export const {
-  addItemToSearchResults,
-  updateItemInSearchResults,
-  clearSearchResults,
+  searchCompleted,
+  itemUpdatedInSearchResults,
+  searchHidden,
 } = searchResults.actions;
 
 export default searchResults.reducer;

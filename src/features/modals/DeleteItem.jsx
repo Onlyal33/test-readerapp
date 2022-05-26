@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 import useModal from '../../common/useModal.js';
-import { deleteItem } from '../items/itemsSlice.js';
+import { itemRemovedFromLibrary } from '../items/itemsSlice.js';
 
 const DeleteItem = ({ item }) => {
   const modalRef = useRef();
@@ -12,7 +12,7 @@ const DeleteItem = ({ item }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(deleteItem(item));
+    dispatch(itemRemovedFromLibrary(item));
     hideModal();
   };
 

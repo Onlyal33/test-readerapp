@@ -7,10 +7,10 @@ import { Formik, Form } from 'formik';
 
 import useModal from '../../common/useModal.js';
 import useValidation from '../../common/useValidation.js';
-import { renameList } from '../lists/listsSlice.js';
+import { listRenamed } from '../lists/listsSlice.js';
 
 const generateOnSubmit = ({ hideModal, dispatch, item: { id } }) => ({ name }) => {
-  dispatch(renameList({ name, id }));
+  dispatch(listRenamed({ name, id }));
   hideModal();
 };
 

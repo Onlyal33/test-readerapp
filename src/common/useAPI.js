@@ -2,8 +2,8 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 
 import routes from './routes.js';
-import { addItemToSearchResults, clearSearchResults, updateItemInSearchResults } from '../features/search/searchResultsSlice.js';
-import { searchCompleted } from '../features/uiSlice.js';
+import { searchCompleted, itemUpdatedInSearchResults } from '../features/search/searchResultsSlice.js';
+// import { searchCompleted } from '../features/uiSlice.js';
 
 export default (searchType) => {
   const dispatch = useDispatch();
@@ -13,32 +13,28 @@ export default (searchType) => {
     const url = routes[searchType](Object.fromEntries(filteredEntries));
     try {
       const { data } = await axios.get(url);
-      dispatch(clearSearchResults());
       actions.setSubmitting(false);
       const languageNames = new Intl.DisplayNames(['en'], {
         type: 'language',
       });
-      data.docs.forEach((item) => {
-        const {
-          key: id,
-          author_name: author,
-          first_publish_year: firstPublishYear,
-          language = [],
-          place = [],
-          subject = [],
-          title,
-        } = item;
-        dispatch(addItemToSearchResults({
-          id,
-          author,
-          firstPublishYear,
-          language: language.map((el) => languageNames.of(el)),
-          place,
-          subject,
-          title,
-        }));
-      });
-      dispatch(searchCompleted({ searchResultsNumber: data.numFound, displayingItemType: 'search' }));
+      const items = data.docs.map(({
+        key: id,
+        author_name: author,
+        first_publish_year: firstPublishYear,
+        language = [],
+        place = [],
+        subject = [],
+        title,
+      }) => ({
+        id,
+        author,
+        firstPublishYear,
+        language: language.map((el) => languageNames.of(el)),
+        place,
+        subject,
+        title,
+      }));
+      dispatch(searchCompleted({ items, searchResultsNumber: data.numFound }));
     } catch (e) {
       actions.setSubmitting(false);
       console.log(e);
@@ -50,7 +46,7 @@ export default (searchType) => {
     const url = routes.fetchBook(id);
     try {
       const { data } = await axios.get(url);
-      dispatch(updateItemInSearchResults({
+      dispatch(itemUpdatedInSearchResults({
         id,
         description: data.description?.value ?? data.description,
       }));

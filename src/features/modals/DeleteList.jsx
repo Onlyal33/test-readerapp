@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux';
 import { Form, Modal, Button } from 'react-bootstrap';
 
 import useModal from '../../common/useModal.js';
-import { deleteList } from '../lists/listsSlice.js';
+import { listDeleted } from '../lists/listsSlice.js';
 
 const generateOnSubmit = ({ hideModal, dispatch, item }) => (e) => {
   e.preventDefault();
-  dispatch(deleteList(item));
+  dispatch(listDeleted(item));
   hideModal();
 };
 

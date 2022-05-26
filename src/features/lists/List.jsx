@@ -2,11 +2,9 @@ import {
   ButtonGroup, Button, Dropdown, Nav,
 } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { clearSearchResults } from '../search/searchResultsSlice.js';
-import {
-  changeActiveList, changeDisplayingItemType,
-} from '../uiSlice.js';
+import { activeListChanged } from '../uiSlice.js';
 import useModal from '../../common/useModal.js';
+import { searchHidden } from '../search/searchResultsSlice.js';
 
 const List = ({ id }) => {
   const list = useSelector((state) => state.entities.lists.byId[id] ?? { type: 'default', name: 'Library' });
@@ -16,9 +14,8 @@ const List = ({ id }) => {
   const { showModal } = useModal();
 
   const handleSelectList = () => {
-    dispatch(changeDisplayingItemType('library'));
-    dispatch(changeActiveList({ id }));
-    dispatch(clearSearchResults({ id }));
+    dispatch(activeListChanged({ id }));
+    dispatch(searchHidden());
   };
 
   if (list.type !== 'user') {

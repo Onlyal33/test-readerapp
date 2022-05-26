@@ -5,30 +5,30 @@ const itemsSlice = createSlice({
   name: 'items',
   initialState: {},
   reducers: {
-    addItem(state, action) {
+    itemAddedToLibrary(state, action) {
       state.byId[action.payload.id] = action.payload;
       state.allIds.push(action.payload.id);
     },
-    deleteItem(state, action) {
+    itemRemovedFromLibrary(state, action) {
       const idToDelete = action.payload.id;
       const { [idToDelete]: deleted, ...modifiedState } = state.byId;
       state.byId = modifiedState;
       state.allIds = state.allIds.filter((id) => id !== idToDelete);
     },
-    toggleReadStatus(state, action) {
+    readStatusToggled(state, action) {
       state.byId[action.payload.id].isRead = !state.byId[action.payload.id].isRead;
     },
-    saveNotes(state, action) {
+    notesChanged(state, action) {
       state.byId[action.payload.id].notes = action.payload.notes;
     },
   },
 });
 
 export const {
-  addItem,
-  deleteItem,
-  toggleReadStatus,
-  saveNotes,
+  itemAddedToLibrary,
+  itemRemovedFromLibrary,
+  readStatusToggled,
+  notesChanged,
 } = itemsSlice.actions;
 
 export default itemsSlice.reducer;

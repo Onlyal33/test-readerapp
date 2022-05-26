@@ -1,70 +1,71 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
-import { deleteList } from './lists/listsSlice.js';
-import { deleteItem } from './items/itemsSlice.js';
+import { listDeleted } from './lists/listsSlice.js';
+import { itemRemovedFromLibrary } from './items/itemsSlice.js';
+import { searchCompleted, searchHidden } from './search/searchResultsSlice.js';
 
 const uiSlice = createSlice({
   name: 'ui',
   initialState: {},
   reducers: {
-    openModal(state, action) {
+    modalOpened(state, action) {
       state.modals.isOpen = true;
       state.modals.type = action.payload.type;
       state.modals.item = action.payload.item;
     },
-    closeModal(state) {
+    modalClosed(state) {
       state.modals.isOpen = false;
       state.modals.type = null;
       state.modals.item = null;
     },
-    changeActiveList(state, action) {
+    activeListChanged(state, action) {
+      state.displayingItemType = 'library';
       state.activeList = action.payload.id;
       state.activeItem = null;
     },
-    changeActiveItem(state, action) {
+    activeItemChanged(state, action) {
       state.activeItem = action.payload.id;
     },
-    toggleAdvancedSearchVisibility(state) {
+    advancedSearchVisibilityChanged(state) {
       state.searchVisibility = state.searchVisibility === 'visible' ? 'invisible' : 'visible';
     },
-    toggleFilter(state) {
+    readItemsVisibilityChanged(state) {
       state.filteringStatus = state.filteringStatus === 'all' ? 'unread' : 'all';
-    },
-    changeDisplayingItemType(state, action) {
-      state.displayingItemType = action.payload;
-    },
-    searchCompleted(state, action) {
-      state.displayingItemType = action.payload.displayingItemType;
-      state.searchResultsNumber = action.payload.searchResultsNumber;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(deleteList, (state, action) => {
+      .addCase(listDeleted, (state, action) => {
         const idToDelete = action.payload.id;
         if (state.activeList === idToDelete) {
           state.activeList = null;
         }
       })
-      .addCase(deleteItem, (state, action) => {
+      .addCase(itemRemovedFromLibrary, (state, action) => {
         const idToDelete = action.payload.id;
         if (state.activeItem === idToDelete) {
           state.activeItem = null;
         }
+      })
+      .addCase(searchCompleted, (state, action) => {
+        state.displayingItemType = 'search';
+        state.searchResultsNumber = action.payload.searchResultsNumber;
+      })
+      .addCase(searchHidden, (state) => {
+        state.displayingItemType = 'library';
+        state.searchResultsNumber = null;
       });
   },
 });
 
 export const {
-  changeActiveList,
-  changeActiveItem,
-  openModal,
-  closeModal,
-  toggleAdvancedSearchVisibility,
-  toggleFilter,
-  changeDisplayingItemType,
-  searchCompleted,
+  modalOpened,
+  modalClosed,
+  activeListChanged,
+  activeItemChanged,
+  advancedSearchVisibilityChanged,
+  readItemsVisibilityChanged,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

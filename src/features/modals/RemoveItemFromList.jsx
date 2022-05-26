@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 import useModal from '../../common/useModal.js';
-import { removeItemFromList } from '../items/listItemSlice.js';
+import { itemRemovedFromList } from '../items/listItemSlice.js';
 
 const selectLists = (id) => (state) => {
   const listsWithItemIds = Object.values(state.entities.listItem.byId)
@@ -23,7 +23,7 @@ const RemoveItemFromList = ({ item }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(removeItemFromList({ listId, itemId: item.id }));
+    dispatch(itemRemovedFromList({ listId, itemId: item.id }));
     hideModal();
   };
 

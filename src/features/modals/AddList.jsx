@@ -7,8 +7,7 @@ import { Formik, Form } from 'formik';
 
 import useModal from '../../common/useModal.js';
 import useValidation from '../../common/useValidation.js';
-import { addList } from '../lists/listsSlice.js';
-import { changeActiveList } from '../uiSlice.js';
+import { listCreated } from '../lists/listsSlice.js';
 
 // generate list id from last id saved in state
 const getNewId = (allIds) => {
@@ -24,14 +23,13 @@ const getNewId = (allIds) => {
 const generateOnSubmit = ({ hideModal, dispatch, store }) => ({ name }) => {
   const { allIds } = store.getState().entities.lists;
   const id = getNewId(allIds);
-  dispatch(addList({ name, id }));
-  dispatch(changeActiveList({ id }));
+  dispatch(listCreated({ name, id }));
   hideModal();
 };
 
 const selectListNames = (state) => Object.values(state.entities.lists.byId).map(({ name }) => name);
 
-const AddList = () => {
+const CreateList = () => {
   const listNames = useSelector(selectListNames);
   const modalRef = useRef();
   const dispatch = useDispatch();
@@ -91,4 +89,4 @@ const AddList = () => {
   );
 };
 
-export default AddList;
+export default CreateList;

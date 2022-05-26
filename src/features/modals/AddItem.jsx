@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-import { addItem } from '../items/itemsSlice.js';
+import { itemAddedToLibrary } from '../items/itemsSlice.js';
 import useModal from '../../common/useModal.js';
 import useAPI from '../../common/useAPI.js';
 
@@ -13,7 +13,7 @@ const generateOnSubmit = ({
   if (!item.detalised) {
     handleFetch(item.id);
   }
-  dispatch(addItem(item));
+  dispatch(itemAddedToLibrary(item));
   hideModal();
 };
 

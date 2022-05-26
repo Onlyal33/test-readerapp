@@ -1,20 +1,20 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
-import { deleteItem } from './itemsSlice.js';
-import { deleteList } from '../lists/listsSlice.js';
+import { itemRemovedFromLibrary } from './itemsSlice.js';
+import { listDeleted } from '../lists/listsSlice.js';
 
 const listItemSlice = createSlice({
   name: 'listItem',
   initialState: {},
   reducers: {
-    addItemToList(state, action) {
+    itemAddedToList(state, action) {
       const { itemId, listId } = action.payload;
       const id = `${listId}_${itemId}`;
       state.byId[action.payload.id] = { id, listId, itemId };
       state.allIds.push(id);
     },
-    removeItemFromList(state, action) {
+    itemRemovedFromList(state, action) {
       const { itemId, listId } = action.payload;
       const idToDelete = Object.values(state.byId)
         .find((el) => el.itemId === itemId && el.listId === listId).id;
@@ -25,14 +25,14 @@ const listItemSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(deleteItem, (state, action) => {
+      .addCase(itemRemovedFromLibrary, (state, action) => {
         const idToRemove = action.payload.id;
         const modifiedState = Object.entries(state.byId)
           .filter(([, { itemId }]) => itemId !== idToRemove);
         state.byId = Object.fromEntries(modifiedState);
         state.allIds = modifiedState.map(([id]) => id);
       })
-      .addCase(deleteList, (state, action) => {
+      .addCase(listDeleted, (state, action) => {
         const idToRemove = action.payload.id;
         const modifiedState = Object.entries(state.byId)
           .filter(([, { listId }]) => listId !== idToRemove);
@@ -43,8 +43,8 @@ const listItemSlice = createSlice({
 });
 
 export const {
-  addItemToList,
-  removeItemFromList,
+  itemAddedToList,
+  itemRemovedFromList,
 } = listItemSlice.actions;
 
 export default listItemSlice.reducer;

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 
-import { toggleFilter } from './uiSlice.js';
+import { readItemsVisibilityChanged } from './uiSlice.js';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ const Header = () => {
 
   const handleFilter = (e) => {
     e.preventDefault();
-    dispatch(toggleFilter());
+    dispatch(readItemsVisibilityChanged());
   };
   return displayingItemType === 'library'
     ? (

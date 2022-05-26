@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import useModal from '../../common/useModal.js';
 import useAPI from '../../common/useAPI.js';
-import { changeActiveItem } from '../uiSlice.js';
+import { activeItemChanged } from '../uiSlice.js';
 
 const SearchItem = ({ id }) => {
   const isItemInLibrary = useSelector((state) => state.entities.items.allIds.includes(id));
@@ -22,7 +22,7 @@ const SearchItem = ({ id }) => {
     if (!detalised) {
       await handleFetch(id);
     }
-    dispatch(changeActiveItem({ id }));
+    dispatch(activeItemChanged({ id }));
   };
 
   const variant = isItemActive ? 'primary' : null;

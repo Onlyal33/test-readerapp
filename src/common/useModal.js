@@ -1,14 +1,14 @@
 import { useDispatch } from 'react-redux';
 
 import {
-  openModal, closeModal,
+  modalClosed, modalOpened,
 } from '../features/uiSlice.js';
 
 export default () => {
   const dispatch = useDispatch();
 
-  const hideModal = () => dispatch(closeModal());
-  const showModal = (type, item = null) => dispatch(openModal({ type, item }));
+  const hideModal = () => dispatch(modalClosed());
+  const showModal = (type, item = null) => dispatch(modalOpened({ type, item }));
 
   return { hideModal, showModal };
 };

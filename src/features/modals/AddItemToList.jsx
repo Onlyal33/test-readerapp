@@ -4,7 +4,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import _ from 'lodash';
 
 import useModal from '../../common/useModal.js';
-import { addItemToList } from '../items/listItemSlice.js';
+import { itemAddedToList } from '../items/listItemSlice.js';
 
 const selectLists = (id) => (state) => {
   const listsIds = state.entities.lists.allIds;
@@ -19,7 +19,7 @@ const generateOnSubmit = ({
   hideModal, dispatch, listId, item,
 }) => async (e) => {
   e.preventDefault();
-  dispatch(addItemToList({ listId, itemId: item.id }));
+  dispatch(itemAddedToList({ listId, itemId: item.id }));
   hideModal();
 };
 
