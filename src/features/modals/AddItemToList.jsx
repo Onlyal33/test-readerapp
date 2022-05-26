@@ -6,7 +6,7 @@ import _ from 'lodash';
 import useModal from '../../common/useModal.js';
 import { addItemToList } from '../items/listItemSlice.js';
 
-const getLists = (id) => (state) => {
+const selectLists = (id) => (state) => {
   const listsIds = state.entities.lists.allIds;
   const listsWithItemIds = Object.values(state.entities.listItem.byId)
     .filter(({ itemId }) => itemId === id)
@@ -24,7 +24,7 @@ const generateOnSubmit = ({
 };
 
 const AddItemToList = ({ item }) => {
-  const lists = useSelector(getLists(item.id));
+  const lists = useSelector(selectLists(item.id));
   const [listId, setListId] = useState(lists[0].id);
   const modalRef = useRef();
   const dispatch = useDispatch();

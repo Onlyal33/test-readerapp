@@ -5,7 +5,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import useModal from '../../common/useModal.js';
 import { removeItemFromList } from '../items/listItemSlice.js';
 
-const getLists = (id) => (state) => {
+const selectLists = (id) => (state) => {
   const listsWithItemIds = Object.values(state.entities.listItem.byId)
     .filter(({ itemId }) => itemId === id)
     .map(({ listId }) => listId);
@@ -16,7 +16,7 @@ const getLists = (id) => (state) => {
 };
 
 const RemoveItemFromList = ({ item }) => {
-  const lists = useSelector(getLists(item.id));
+  const lists = useSelector(selectLists(item.id));
   const [listId, setListId] = useState(lists[0].id);
   const modalRef = useRef();
   const dispatch = useDispatch();

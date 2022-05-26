@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import Item from './Item.jsx';
 
-const getItemsIds = (itemType) => (state) => {
+const selectItemsIds = (itemType) => (state) => {
   if (itemType === 'library') {
     const itemsIds = Object.values(state.entities.listItem.byId)
       .filter(({ listId }) => listId === state.ui.activeList)
@@ -18,7 +18,7 @@ const getItemsIds = (itemType) => (state) => {
 
 const Items = () => {
   const itemType = useSelector((state) => state.ui.displayingItemType);
-  const itemsIds = useSelector(getItemsIds(itemType));
+  const itemsIds = useSelector(selectItemsIds(itemType));
 
   if (itemsIds.length === 0) {
     return null;

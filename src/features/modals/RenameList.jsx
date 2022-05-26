@@ -14,12 +14,12 @@ const generateOnSubmit = ({ hideModal, dispatch, item: { id } }) => ({ name }) =
   hideModal();
 };
 
-const getFiletredListNames = (idToRename) => (state) => Object.values(state.entities.lists.byId)
+const selectFiletredListNames = (idToRename) => (state) => Object.values(state.entities.lists.byId)
   .filter(({ id }) => id !== idToRename)
   .map(({ name }) => name);
 
 const RenameList = ({ item }) => {
-  const listNames = useSelector(getFiletredListNames(item.id));
+  const listNames = useSelector(selectFiletredListNames(item.id));
   const modalRef = useRef();
   const dispatch = useDispatch();
   const validationSchema = useValidation(listNames);

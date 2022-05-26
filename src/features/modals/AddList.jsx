@@ -21,10 +21,10 @@ const generateOnSubmit = ({ hideModal, dispatch, store }) => ({ name }) => {
   hideModal();
 };
 
-const getListNames = (state) => Object.values(state.entities.lists.byId).map(({ name }) => name);
+const selectListNames = (state) => Object.values(state.entities.lists.byId).map(({ name }) => name);
 
 const AddList = () => {
-  const listNames = useSelector(getListNames);
+  const listNames = useSelector(selectListNames);
   const modalRef = useRef();
   const dispatch = useDispatch();
   const store = useStore();

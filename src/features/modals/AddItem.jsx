@@ -7,7 +7,7 @@ import { addItemToList } from '../items/listItemSlice.js';
 import useModal from '../../common/useModal.js';
 import useAPI from '../../common/useAPI.js';
 
-const getDefaultListId = (state) => state.entities.lists.byId[state.entities.lists.allIds[0]].id;
+const selectDefaultListId = (state) => state.entities.lists.byId[state.entities.lists.allIds[0]].id;
 
 const generateOnSubmit = ({
   hideModal, dispatch, handleFetch, listId, item,
@@ -24,7 +24,7 @@ const generateOnSubmit = ({
 const AddItem = ({ item }) => {
   const modalRef = useRef();
   const dispatch = useDispatch();
-  const listId = useSelector(getDefaultListId);
+  const listId = useSelector(selectDefaultListId);
   const { hideModal } = useModal();
   const { handleFetch } = useAPI();
   useEffect(() => {

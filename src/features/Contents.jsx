@@ -6,11 +6,11 @@ import { useState } from 'react';
 
 import Notes from './Notes';
 
-const getActiveItem = (state) => state.entities.items.byId[state.ui.activeItem]
+const selectActiveItem = (state) => state.entities.items.byId[state.ui.activeItem]
   ?? state.entities.searchResults.byId[state.ui.activeItem];
 
 const Contents = () => {
-  const activeItem = useSelector(getActiveItem);
+  const activeItem = useSelector(selectActiveItem);
   const [openNotes, setOpenNotes] = useState(false);
 
   if (!activeItem) {
