@@ -8,10 +8,6 @@ const listItemSlice = createSlice({
   name: 'listItem',
   initialState: {},
   reducers: {
-    setInitialState(state, action) {
-      state.byId = action.payload.byId;
-      state.allIds = action.payload.allIds;
-    },
     addItemToList(state, action) {
       const { itemId, listId } = action.payload;
       const id = `${listId}_${itemId}`;
@@ -47,7 +43,6 @@ const listItemSlice = createSlice({
 });
 
 export const {
-  setInitialState,
   addItemToList,
   removeItemFromList,
 } = listItemSlice.actions;

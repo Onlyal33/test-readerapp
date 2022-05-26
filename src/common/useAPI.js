@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import routes from './routes.js';
 import { addItemToSearchResults, clearSearchResults, updateItemInSearchResults } from '../features/search/searchResultsSlice.js';
-import { changeActiveList, searchCompleted } from '../features/uiSlice.js';
+import { searchCompleted } from '../features/uiSlice.js';
 
 export default (searchType) => {
   const dispatch = useDispatch();
@@ -39,7 +39,6 @@ export default (searchType) => {
         }));
       });
       dispatch(searchCompleted({ searchResultsNumber: data.numFound, displayingItemType: 'search' }));
-      dispatch(changeActiveList({ id: null }));
     } catch (e) {
       actions.setSubmitting(false);
       console.log(e);

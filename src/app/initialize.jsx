@@ -29,14 +29,8 @@ const initialize = () => {
           allIds: [],
         },
         lists: {
-          byId: {
-            list_0: {
-              id: 'list_0',
-              name: 'Library',
-              type: 'default',
-            },
-          },
-          allIds: ['list_0'],
+          byId: {},
+          allIds: [],
         },
         listItem: {
           byId: {},
@@ -49,7 +43,7 @@ const initialize = () => {
         },
       },
       ui: {
-        activeList: 'list_0',
+        activeList: null,
         activeItem: null,
         searchVisibility: 'invisible',
         filteringStatus: 'all',

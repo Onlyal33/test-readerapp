@@ -44,7 +44,7 @@ const uiSlice = createSlice({
       .addCase(deleteList, (state, action) => {
         const idToDelete = action.payload.id;
         if (state.activeList === idToDelete) {
-          state.activeList = '0';
+          state.activeList = null;
         }
       })
       .addCase(deleteItem, (state, action) => {

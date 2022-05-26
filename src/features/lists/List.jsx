@@ -9,7 +9,7 @@ import {
 import useModal from '../../common/useModal.js';
 
 const List = ({ id }) => {
-  const list = useSelector((state) => state.entities.lists.byId[id]);
+  const list = useSelector((state) => state.entities.lists.byId[id] ?? { type: 'default', name: 'Library' });
   const isListActive = useSelector((state) => state.ui.activeList === id);
   const variant = isListActive ? 'outline-secondary' : null;
   const dispatch = useDispatch();
@@ -21,10 +21,10 @@ const List = ({ id }) => {
     dispatch(clearSearchResults({ id }));
   };
 
-  if (list.type === 'default') {
+  if (list.type !== 'user') {
     return (
       <Nav.Item key={id} className="w-100">
-        <Button onClick={handleSelectList} variant={variant} className="w-100 text-start text-truncate fw-bold">{list.name}</Button>
+        <Button onClick={handleSelectList} variant={variant} className="w-100 text-start text-truncate">{list.name}</Button>
       </Nav.Item>
     );
   }

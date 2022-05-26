@@ -5,10 +5,6 @@ const itemsSlice = createSlice({
   name: 'items',
   initialState: {},
   reducers: {
-    setInitialState(state, action) {
-      state.byId = action.payload.byId;
-      state.allIds = action.payload.allIds;
-    },
     addItem(state, action) {
       state.byId[action.payload.id] = action.payload;
       state.allIds.push(action.payload.id);
@@ -29,7 +25,6 @@ const itemsSlice = createSlice({
 });
 
 export const {
-  setInitialState,
   addItem,
   deleteItem,
   toggleReadStatus,

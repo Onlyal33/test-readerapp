@@ -11,6 +11,7 @@ const Lists = () => {
 
   return (
     <>
+      <div>Library</div>
       <div className="d-flex my-2 justify-content-between">
         <span>Your Lists</span>
         <Button variant="link" className="p-0 text-secondary" onClick={() => showModal('add')}>
@@ -22,6 +23,7 @@ const Lists = () => {
         </Button>
       </div>
       <Nav>
+        <List key={null} id={null} />
         {listsIds.map((id) => <List key={id} id={id} />)}
       </Nav>
     </>

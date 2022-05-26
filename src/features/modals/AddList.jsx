@@ -10,12 +10,20 @@ import useValidation from '../../common/useValidation.js';
 import { addList } from '../lists/listsSlice.js';
 import { changeActiveList } from '../uiSlice.js';
 
+// generate list id from last id saved in state
+const getNewId = (allIds) => {
+  if (allIds.length !== 0) {
+    const lastIdChunks = allIds[allIds.length - 1].split('_');
+    const lastIdNumber = Number(lastIdChunks[lastIdChunks.length - 1]);
+    return `list_${lastIdNumber + 1}`;
+  }
+
+  return 'list_0';
+};
+
 const generateOnSubmit = ({ hideModal, dispatch, store }) => ({ name }) => {
-  // generate list id from last id saved in state
   const { allIds } = store.getState().entities.lists;
-  const lastIdChunks = allIds[allIds.length - 1].split('_');
-  const lastIdNumber = Number(lastIdChunks[lastIdChunks.length - 1]);
-  const id = `list_${lastIdNumber + 1}`;
+  const id = getNewId(allIds);
   dispatch(addList({ name, id }));
   dispatch(changeActiveList({ id }));
   hideModal();

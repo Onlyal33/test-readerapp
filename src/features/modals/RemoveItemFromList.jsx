@@ -10,8 +10,7 @@ const selectLists = (id) => (state) => {
     .filter(({ itemId }) => itemId === id)
     .map(({ listId }) => listId);
   const listsWithItem = listsWithItemIds
-    .map((listId) => state.entities.lists.byId[listId])
-    .filter(({ type }) => type !== 'default');
+    .map((listId) => state.entities.lists.byId[listId]);
   return listsWithItem;
 };
 

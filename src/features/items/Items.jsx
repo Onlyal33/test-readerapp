@@ -4,16 +4,19 @@ import { useSelector } from 'react-redux';
 import Item from './Item.jsx';
 
 const selectItemsIds = (itemType) => (state) => {
-  if (itemType === 'library') {
-    const itemsIds = Object.values(state.entities.listItem.byId)
-      .filter(({ listId }) => listId === state.ui.activeList)
-      .map(({ itemId }) => itemId);
-    return state.ui.filteringStatus === 'all'
-      ? itemsIds
-      : itemsIds.filter((id) => !state.entities.items.byId[id].isRead);
+  if (itemType === 'search') {
+    return state.entities.searchResults.allIds;
   }
 
-  return state.entities.searchResults.allIds;
+  const activeListId = state.ui.activeList;
+  const itemsIds = activeListId === null
+    ? state.entities.items.allIds
+    : Object.values(state.entities.listItem.byId)
+      .filter(({ listId }) => listId === state.ui.activeList)
+      .map(({ itemId }) => itemId);
+  return state.ui.filteringStatus === 'all'
+    ? itemsIds
+    : itemsIds.filter((id) => !state.entities.items.byId[id].isRead);
 };
 
 const Items = () => {

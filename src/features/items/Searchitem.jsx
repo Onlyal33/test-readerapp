@@ -9,20 +9,17 @@ import { changeActiveItem } from '../uiSlice.js';
 
 const SearchItem = ({ id }) => {
   const isItemInLibrary = useSelector((state) => state.entities.items.allIds.includes(id));
-  const isItemDetalised = useSelector(
-    (state) => state.entities.searchResults.byId[id].detalised,
-  );
   const isItemActive = useSelector((state) => state.ui.activeItem === id);
   const item = useSelector((state) => state.entities.searchResults.byId[id]);
   const {
-    title, author, firstPublishYear,
+    title, author, firstPublishYear, detalised,
   } = item;
   const dispatch = useDispatch();
   const { showModal } = useModal();
   const { handleFetch } = useAPI();
 
   const handleSelectItem = async () => {
-    if (!isItemDetalised) {
+    if (!detalised) {
       await handleFetch(id);
     }
     dispatch(changeActiveItem({ id }));

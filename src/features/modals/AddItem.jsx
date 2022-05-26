@@ -1,30 +1,25 @@
 import { useRef, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 import { addItem } from '../items/itemsSlice.js';
-import { addItemToList } from '../items/listItemSlice.js';
 import useModal from '../../common/useModal.js';
 import useAPI from '../../common/useAPI.js';
 
-const selectDefaultListId = (state) => state.entities.lists.byId[state.entities.lists.allIds[0]].id;
-
 const generateOnSubmit = ({
-  hideModal, dispatch, handleFetch, listId, item,
+  hideModal, dispatch, handleFetch, item,
 }) => async (e) => {
   e.preventDefault();
   if (!item.detalised) {
     handleFetch(item.id);
   }
   dispatch(addItem(item));
-  dispatch(addItemToList({ itemId: item.id, listId }));
   hideModal();
 };
 
 const AddItem = ({ item }) => {
   const modalRef = useRef();
   const dispatch = useDispatch();
-  const listId = useSelector(selectDefaultListId);
   const { hideModal } = useModal();
   const { handleFetch } = useAPI();
   useEffect(() => {
@@ -37,7 +32,7 @@ const AddItem = ({ item }) => {
         <Modal.Title>Add Item to Library</Modal.Title>
       </Modal.Header>
       <Form onSubmit={generateOnSubmit({
-        hideModal, dispatch, handleFetch, listId, item,
+        hideModal, dispatch, handleFetch, item,
       })}
       >
         <Modal.Body>
