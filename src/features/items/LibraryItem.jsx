@@ -49,8 +49,8 @@ const LibraryItem = ({ id }) => {
         </Button>
         <Dropdown.Toggle split variant={variant} />
         <Dropdown.Menu>
-          {isAddItemToListAvaliable ? <Dropdown.Item onClick={() => showModal('addToList', item)}>Add to List</Dropdown.Item> : null}
-          {isRemoveItemFromListAvaliable ? <Dropdown.Item onClick={() => showModal('removeFromList', item)}>Remove from List</Dropdown.Item> : null}
+          {isAddItemToListAvaliable ? <Dropdown.Item onClick={() => showModal('addItemToList', item)}>Add to List</Dropdown.Item> : null}
+          {isRemoveItemFromListAvaliable ? <Dropdown.Item onClick={() => showModal('removeItemFromList', item)}>Remove from List</Dropdown.Item> : null}
           <Dropdown.Item onClick={toggleRead}>
             Mark as
             {' '}

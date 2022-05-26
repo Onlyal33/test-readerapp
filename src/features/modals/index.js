@@ -8,11 +8,11 @@ import AddItem from './AddItem.jsx';
 import DeleteItem from './DeleteItem.jsx';
 
 const modals = {
-  add: AddList,
-  delete: DeleteList,
-  rename: RenameList,
-  addToList: AddItemToList,
-  removeFromList: RemoveItemFromList,
+  addList: AddList,
+  deleteList: DeleteList,
+  renameList: RenameList,
+  addItemToList: AddItemToList,
+  removeItemFromList: RemoveItemFromList,
   deleteItem: DeleteItem,
   editNotes: EditNotes,
   addItem: AddItem,

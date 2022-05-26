@@ -32,8 +32,8 @@ const List = ({ id }) => {
         <Button onClick={handleSelectList} variant={variant} className="w-100 border-end-0 text-start text-truncate">{list.name}</Button>
         <Dropdown.Toggle split variant={variant} className="border-start-0" />
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => showModal('delete', list)}>Remove List</Dropdown.Item>
-          <Dropdown.Item onClick={() => showModal('rename', list)}>Rename List</Dropdown.Item>
+          <Dropdown.Item onClick={() => showModal('deleteList', list)}>Remove List</Dropdown.Item>
+          <Dropdown.Item onClick={() => showModal('renameList', list)}>Rename List</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </Nav.Item>
