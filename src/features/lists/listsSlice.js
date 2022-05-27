@@ -29,3 +29,7 @@ export const {
 } = listsSlice.actions;
 
 export default listsSlice.reducer;
+
+export const selectListsIds = (state) => state.entities.lists.allIds;
+
+export const selectLists = (state) => state.entities.lists.byId;

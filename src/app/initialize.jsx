@@ -46,7 +46,7 @@ const initialize = () => {
         activeList: null,
         activeItem: null,
         searchVisibility: 'invisible',
-        filteringStatus: 'all',
+        readItemsVisibility: 'all',
         displayingItemType: 'library',
         modals: { isOpen: false, type: null, item: null },
         searchResultsNumber: null,

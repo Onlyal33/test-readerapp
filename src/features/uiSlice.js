@@ -7,7 +7,15 @@ import { searchCompleted, searchHidden } from './search/searchResultsSlice.js';
 
 const uiSlice = createSlice({
   name: 'ui',
-  initialState: {},
+  initialState: {
+    activeList: null,
+    activeItem: null,
+    searchVisibility: 'invisible',
+    readItemsVisibility: 'all',
+    displayingItemType: 'library',
+    modals: { isOpen: false, type: null, item: null },
+    searchResultsNumber: null,
+  },
   reducers: {
     modalOpened(state, action) {
       state.modals.isOpen = true;
@@ -31,7 +39,7 @@ const uiSlice = createSlice({
       state.searchVisibility = state.searchVisibility === 'visible' ? 'invisible' : 'visible';
     },
     readItemsVisibilityChanged(state) {
-      state.filteringStatus = state.filteringStatus === 'all' ? 'unread' : 'all';
+      state.readItemsVisibility = state.readItemsVisibility === 'all' ? 'unread' : 'all';
     },
   },
   extraReducers: (builder) => {
@@ -69,3 +77,17 @@ export const {
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
+
+export const selectDisplayingItemType = (state) => state.ui.displayingItemType;
+
+export const selectSearchResultsNumber = (state) => state.ui.searchResultsNumber;
+
+export const selectReadItemsVisibility = (state) => state.ui.readItemsVisibility;
+
+export const selectIsAdvancedSearchVisible = (state) => state.ui.searchVisibility;
+
+export const selectIsListActive = (id) => (state) => state.ui.activeList === id;
+
+export const selectIsItemActive = (id) => (state) => state.ui.activeItem === id;
+
+export const selectActiveListId = (state) => state.ui.activeList;

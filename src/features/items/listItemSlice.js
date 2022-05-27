@@ -11,7 +11,7 @@ const listItemSlice = createSlice({
     itemAddedToList(state, action) {
       const { itemId, listId } = action.payload;
       const id = `${listId}_${itemId}`;
-      state.byId[action.payload.id] = { id, listId, itemId };
+      state.byId[id] = { id, listId, itemId };
       state.allIds.push(id);
     },
     itemRemovedFromList(state, action) {
@@ -48,3 +48,5 @@ export const {
 } = listItemSlice.actions;
 
 export default listItemSlice.reducer;
+
+export const selectListItem = (state) => state.entities.listItem.byId;

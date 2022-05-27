@@ -1,21 +1,21 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { createSelector } from '@reduxjs/toolkit';
 
 import useModal from '../../common/useModal.js';
-import { itemRemovedFromList } from '../items/listItemSlice.js';
+import { itemRemovedFromList, selectListItem } from '../items/listItemSlice.js';
+import { selectLists } from '../lists/listsSlice.js';
 
-const selectLists = (id) => (state) => {
-  const listsWithItemIds = Object.values(state.entities.listItem.byId)
+const selectListsToRemoveItemFrom = createSelector(
+  [selectLists, selectListItem, (_, id) => id],
+  (lists, listItem, id) => Object.values(listItem)
     .filter(({ itemId }) => itemId === id)
-    .map(({ listId }) => listId);
-  const listsWithItem = listsWithItemIds
-    .map((listId) => state.entities.lists.byId[listId]);
-  return listsWithItem;
-};
+    .map(({ listId }) => lists[listId]),
+);
 
 const RemoveItemFromList = ({ item }) => {
-  const lists = useSelector(selectLists(item.id));
+  const lists = useSelector((state) => selectListsToRemoveItemFrom(state, item.id));
   const [listId, setListId] = useState(lists[0].id);
   const modalRef = useRef();
   const dispatch = useDispatch();

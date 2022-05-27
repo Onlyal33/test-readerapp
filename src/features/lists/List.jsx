@@ -1,14 +1,16 @@
 import {
   ButtonGroup, Button, Dropdown, Nav,
 } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import { activeListChanged } from '../uiSlice.js';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { activeListChanged, selectIsListActive } from '../uiSlice.js';
 import useModal from '../../common/useModal.js';
 import { searchHidden } from '../search/searchResultsSlice.js';
 
+const selectList = (id) => (state) => state.entities.lists.byId[id] ?? { type: 'default', name: 'Library' };
+
 const List = ({ id }) => {
-  const list = useSelector((state) => state.entities.lists.byId[id] ?? { type: 'default', name: 'Library' });
-  const isListActive = useSelector((state) => state.ui.activeList === id);
+  const list = useSelector(selectList(id), shallowEqual);
+  const isListActive = useSelector(selectIsListActive(id));
   const variant = isListActive ? 'outline-secondary' : null;
   const dispatch = useDispatch();
   const { showModal } = useModal();

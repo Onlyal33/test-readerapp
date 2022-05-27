@@ -5,7 +5,7 @@ import routes from './routes.js';
 import { searchCompleted, itemUpdatedInSearchResults } from '../features/search/searchResultsSlice.js';
 // import { searchCompleted } from '../features/uiSlice.js';
 
-export default (searchType) => {
+export default ({ searchType = 'search' }) => {
   const dispatch = useDispatch();
 
   const handleSearch = async (values, actions) => {

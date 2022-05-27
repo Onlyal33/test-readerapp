@@ -32,3 +32,11 @@ export const {
 } = itemsSlice.actions;
 
 export default itemsSlice.reducer;
+
+export const selectIsItemInLibrary = (id) => (state) => state.entities.items.allIds.includes(id);
+
+export const selectLibraryItemsIds = (state) => state.entities.items.allIds;
+
+export const selectLibraryItems = (state) => state.entities.items.byId;
+
+export const selectLibraryItem = (id) => (state) => state.entities.items.byId[id];

@@ -6,10 +6,11 @@ import { Formik, Form } from 'formik';
 
 import SearchInput from './SearchInput.jsx';
 import useAPI from '../../common/useAPI.js';
+import { selectIsAdvancedSearchVisible } from '../uiSlice.js';
 
 const AdvancedSearch = () => {
-  const { handleSearch } = useAPI('advancedSearch');
-  const searchVisibility = useSelector((state) => state.ui.searchVisibility);
+  const searchVisibility = useSelector(selectIsAdvancedSearchVisible);
+  const { handleSearch } = useAPI({ searchType: 'advancedSearch' });
 
   return searchVisibility === 'visible' ? (
     <Formik

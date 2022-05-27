@@ -38,3 +38,7 @@ export const {
 } = searchResults.actions;
 
 export default searchResults.reducer;
+
+export const selectSearchItemsIds = (state) => state.entities.searchResults.allIds;
+
+export const selectSearchItem = (id) => (state) => state.entities.searchResults.byId[id];

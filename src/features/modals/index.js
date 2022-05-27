@@ -4,7 +4,6 @@ import RenameList from './RenameList.jsx';
 import EditNotes from './EditNotes.jsx';
 import AddItemToList from './AddItemToList.jsx';
 import RemoveItemFromList from './RemoveItemFromList.jsx';
-import AddItem from './AddItem.jsx';
 import DeleteItem from './DeleteItem.jsx';
 
 const modals = {
@@ -15,7 +14,6 @@ const modals = {
   removeItemFromList: RemoveItemFromList,
   deleteItem: DeleteItem,
   editNotes: EditNotes,
-  addItem: AddItem,
 };
 
 export default (modalName) => modals[modalName];

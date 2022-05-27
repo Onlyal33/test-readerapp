@@ -1,13 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 
-import { readItemsVisibilityChanged } from './uiSlice.js';
+import {
+  readItemsVisibilityChanged,
+  selectDisplayingItemType,
+  selectSearchResultsNumber,
+  selectReadItemsVisibility,
+} from './uiSlice.js';
 
 const Header = () => {
+  const filteringStatus = useSelector(selectReadItemsVisibility);
+  const searchResultsNumber = useSelector(selectSearchResultsNumber);
+  const displayingItemType = useSelector(selectDisplayingItemType);
   const dispatch = useDispatch();
-  const filteringStatus = useSelector((state) => state.ui.filteringStatus);
-  const searchResultsNumber = useSelector((state) => state.ui.searchResultsNumber);
-  const displayingItemType = useSelector((state) => state.ui.displayingItemType);
 
   const handleFilter = (e) => {
     e.preventDefault();

@@ -1,19 +1,23 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { createSelector } from '@reduxjs/toolkit';
 import _ from 'lodash';
 
 import useModal from '../../common/useModal.js';
-import { itemAddedToList } from '../items/listItemSlice.js';
+import { itemAddedToList, selectListItem } from '../items/listItemSlice.js';
+import { selectListsIds, selectLists } from '../lists/listsSlice.js';
 
-const selectLists = (id) => (state) => {
-  const listsIds = state.entities.lists.allIds;
-  const listsWithItemIds = Object.values(state.entities.listItem.byId)
-    .filter(({ itemId }) => itemId === id)
-    .map(({ listId }) => listId);
-  const listsWithoutItemsIds = _.difference(listsIds, listsWithItemIds);
-  return listsWithoutItemsIds.map((listId) => state.entities.lists.byId[listId]);
-};
+const selectListsToAddItemTo = createSelector(
+  [selectListsIds, selectListItem, selectLists, (__, id) => id],
+  (listsIds, listItem, lists, id) => {
+    const listsWithItemIds = Object.values(listItem)
+      .filter(({ itemId }) => itemId === id)
+      .map(({ listId }) => listId);
+    const listsWithoutItemsIds = _.difference(listsIds, listsWithItemIds);
+    return listsWithoutItemsIds.map((listId) => lists[listId]);
+  },
+);
 
 const generateOnSubmit = ({
   hideModal, dispatch, listId, item,
@@ -24,7 +28,7 @@ const generateOnSubmit = ({
 };
 
 const AddItemToList = ({ item }) => {
-  const lists = useSelector(selectLists(item.id));
+  const lists = useSelector((state) => selectListsToAddItemTo(state, item.id));
   const [listId, setListId] = useState(lists[0].id);
   const modalRef = useRef();
   const dispatch = useDispatch();

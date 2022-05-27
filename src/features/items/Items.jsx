@@ -1,27 +1,38 @@
 import { ListGroup } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 
+import { createSelector } from '@reduxjs/toolkit';
 import Item from './Item.jsx';
+import { selectDisplayingItemType, selectActiveListId, selectReadItemsVisibility } from '../uiSlice.js';
+import { selectSearchItemsIds } from '../search/searchResultsSlice.js';
+import { selectLibraryItemsIds, selectLibraryItems } from './itemsSlice.js';
 
-const selectItemsIds = (itemType) => (state) => {
-  if (itemType === 'search') {
-    return state.entities.searchResults.allIds;
-  }
+const selectListItem = (state) => state.entities.listItem.byId;
 
-  const activeListId = state.ui.activeList;
-  const itemsIds = activeListId === null
-    ? state.entities.items.allIds
-    : Object.values(state.entities.listItem.byId)
-      .filter(({ listId }) => listId === state.ui.activeList)
-      .map(({ itemId }) => itemId);
-  return state.ui.filteringStatus === 'all'
-    ? itemsIds
-    : itemsIds.filter((id) => !state.entities.items.byId[id].isRead);
-};
+const selectLibraryItemsIdsByList = createSelector(
+  [selectActiveListId, selectLibraryItemsIds, selectListItem],
+  (activeListId, libraryListItemsIds, listItem) => (activeListId === null
+    ? libraryListItemsIds
+    : Object.values(listItem)
+      .filter(({ listId }) => listId === activeListId)
+      .map(({ itemId }) => itemId)),
+);
+
+const selectLibraryItemsIdsByListFiltered = createSelector(
+  [selectLibraryItemsIdsByList, selectLibraryItems, selectReadItemsVisibility],
+  (libraryItemsIdsByList, libraryItems, readItemsVisibility) => (readItemsVisibility === 'all'
+    ? libraryItemsIdsByList
+    : libraryItemsIdsByList.filter((id) => !libraryItems[id].isRead)),
+);
+
+const selectItemsIds = createSelector(
+  [selectLibraryItemsIdsByListFiltered, selectSearchItemsIds, (_, itemType) => itemType],
+  (libraryItemsIds, searchItemsIds, itemType) => (itemType === 'search' ? searchItemsIds : libraryItemsIds),
+);
 
 const Items = () => {
-  const itemType = useSelector((state) => state.ui.displayingItemType);
-  const itemsIds = useSelector(selectItemsIds(itemType));
+  const itemType = useSelector(selectDisplayingItemType);
+  const itemsIds = useSelector((state) => selectItemsIds(state, itemType), shallowEqual);
 
   if (itemsIds.length === 0) {
     return null;

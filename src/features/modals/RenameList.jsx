@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 import {
   Modal, Button, FormControl, InputGroup,
 } from 'react-bootstrap';
@@ -7,19 +8,22 @@ import { Formik, Form } from 'formik';
 
 import useModal from '../../common/useModal.js';
 import useValidation from '../../common/useValidation.js';
-import { listRenamed } from '../lists/listsSlice.js';
+import { listRenamed, selectLists, selectListsIds } from '../lists/listsSlice.js';
 
 const generateOnSubmit = ({ hideModal, dispatch, item: { id } }) => ({ name }) => {
   dispatch(listRenamed({ name, id }));
   hideModal();
 };
 
-const selectFiletredListNames = (idToRename) => (state) => Object.values(state.entities.lists.byId)
-  .filter(({ id }) => id !== idToRename)
-  .map(({ name }) => name);
+const selectListNamesExceptCurrent = createSelector(
+  [selectLists, selectListsIds, (_, id) => id],
+  (lists, listsIds, id) => listsIds
+    .filter((list) => id !== list.id)
+    .map((listId) => (lists[listId].name)),
+);
 
 const RenameList = ({ item }) => {
-  const listNames = useSelector(selectFiletredListNames(item.id));
+  const listNames = useSelector((state) => selectListNamesExceptCurrent(state, item.id));
   const modalRef = useRef();
   const dispatch = useDispatch();
   const validationSchema = useValidation(listNames);

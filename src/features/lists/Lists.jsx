@@ -4,9 +4,10 @@ import {
 import { shallowEqual, useSelector } from 'react-redux';
 import List from './List.jsx';
 import useModal from '../../common/useModal.js';
+import { selectListsIds } from './listsSlice.js';
 
 const Lists = () => {
-  const listsIds = useSelector((state) => state.entities.lists.allIds, shallowEqual);
+  const listsIds = useSelector(selectListsIds, shallowEqual);
   const { showModal } = useModal();
 
   return (

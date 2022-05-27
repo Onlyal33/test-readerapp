@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import SearchInput from './SearchInput.jsx';
 import useAPI from '../../common/useAPI.js';
-import { advancedSearchVisibilityChanged } from '../uiSlice.js';
+import { advancedSearchVisibilityChanged, selectIsAdvancedSearchVisible } from '../uiSlice.js';
 
 const Search = () => {
+  const searchVisibility = useSelector(selectIsAdvancedSearchVisible);
   const dispatch = useDispatch();
-  const searchVisibility = useSelector((state) => state.ui.searchVisibility);
-  const { handleSearch } = useAPI('search');
+  const { handleSearch } = useAPI({ searchType: 'search' });
 
   const toggleAdvancedSearch = (e) => {
     e.preventDefault();
