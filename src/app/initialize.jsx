@@ -8,9 +8,11 @@ import listsReducer from '../features/lists/listsSlice.js';
 import uiReducer from '../features/uiSlice.js';
 import listItemReducer from '../features/items/listItemSlice.js';
 import searchResultsReducer from '../features/search/searchResultsSlice.js';
+import useLocalStorage from '../common/useLocalStorage.js';
 
 const initialize = () => {
-  const localState = (JSON.parse(localStorage.getItem('readerAppState')) ?? {});
+  const { loadFromLocalStorage } = useLocalStorage();
+  const localState = loadFromLocalStorage();
 
   const store = configureStore({
     reducer: {
@@ -24,32 +26,7 @@ const initialize = () => {
     },
     preloadedState: {
       entities: {
-        items: {
-          byId: {},
-          allIds: [],
-        },
-        lists: {
-          byId: {},
-          allIds: [],
-        },
-        listItem: {
-          byId: {},
-          allIds: [],
-        },
         ...localState,
-        searchResults: {
-          byId: {},
-          allIds: [],
-        },
-      },
-      ui: {
-        activeList: null,
-        activeItem: null,
-        searchVisibility: 'invisible',
-        readItemsVisibility: 'all',
-        displayingItemType: 'library',
-        modals: { isOpen: false, type: null, item: null },
-        searchResultsNumber: null,
       },
     },
   });

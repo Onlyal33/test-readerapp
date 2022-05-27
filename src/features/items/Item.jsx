@@ -36,11 +36,11 @@ const Item = ({ type, id }) => {
   } = item;
 
   const dispatch = useDispatch();
-  const { handleFetch } = useAPI({ id });
+  const { handleFetch } = useAPI();
 
   const handleSelectItem = async () => {
     if (type === 'search' && !detalised) {
-      await handleFetch();
+      await handleFetch(id);
     }
     dispatch(activeItemChanged({ id }));
   };

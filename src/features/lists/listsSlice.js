@@ -3,7 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const listsSlice = createSlice({
   name: 'lists',
-  initialState: {},
+  initialState: {
+    byId: {},
+    allIds: [],
+  },
   reducers: {
     listCreated(state, action) {
       state.byId[action.payload.id] = { ...action.payload, type: 'user' };

@@ -3,9 +3,8 @@ import { useDispatch } from 'react-redux';
 
 import routes from './routes.js';
 import { searchCompleted, itemUpdatedInSearchResults } from '../features/search/searchResultsSlice.js';
-// import { searchCompleted } from '../features/uiSlice.js';
 
-export default ({ searchType = 'search' }) => {
+export default (searchType) => {
   const dispatch = useDispatch();
 
   const handleSearch = async (values, actions) => {

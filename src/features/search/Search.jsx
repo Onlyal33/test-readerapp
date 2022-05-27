@@ -11,7 +11,7 @@ import { advancedSearchVisibilityChanged, selectIsAdvancedSearchVisible } from '
 const Search = () => {
   const searchVisibility = useSelector(selectIsAdvancedSearchVisible);
   const dispatch = useDispatch();
-  const { handleSearch } = useAPI({ searchType: 'search' });
+  const { handleSearch } = useAPI('search');
 
   const toggleAdvancedSearch = (e) => {
     e.preventDefault();

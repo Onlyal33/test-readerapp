@@ -3,7 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const itemsSlice = createSlice({
   name: 'items',
-  initialState: {},
+  initialState: {
+    byId: {},
+    allIds: [],
+  },
   reducers: {
     itemAddedToLibrary(state, action) {
       state.byId[action.payload.id] = action.payload;

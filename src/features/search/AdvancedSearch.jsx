@@ -10,7 +10,7 @@ import { selectIsAdvancedSearchVisible } from '../uiSlice.js';
 
 const AdvancedSearch = () => {
   const searchVisibility = useSelector(selectIsAdvancedSearchVisible);
-  const { handleSearch } = useAPI({ searchType: 'advancedSearch' });
+  const { handleSearch } = useAPI('advancedSearch');
 
   return searchVisibility === 'visible' ? (
     <Formik

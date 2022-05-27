@@ -5,6 +5,7 @@ import {
 import HeaderFilter from '../features/HeaderFilter.jsx';
 import Search from '../features/search/Search.jsx';
 import SaveButton from '../features/SaveButton.jsx';
+import AddListButton from '../features/lists/AddListButton.jsx';
 import Lists from '../features/lists/Lists.jsx';
 import Items from '../features/items/Items.jsx';
 import AdvancedSearch from '../features/search/AdvancedSearch.jsx';
@@ -27,6 +28,7 @@ const App = () => (
     <Row className="rounded shadow m-0 overflow-hidden flex-grow-1">
       <Col xs={2} className="px-2 bg-secondary bg-opacity-10">
         <SaveButton />
+        <AddListButton />
         <Lists />
       </Col>
       <Col xs={4} className="px-2 my-2 h-100 overflow-auto">

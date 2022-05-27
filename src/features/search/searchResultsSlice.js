@@ -3,7 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const searchResults = createSlice({
   name: 'searchResults',
-  initialState: {},
+  initialState: {
+    byId: {},
+    allIds: [],
+  },
   reducers: {
     searchCompleted(state, action) {
       const byId = {};

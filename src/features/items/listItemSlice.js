@@ -6,7 +6,10 @@ import { listDeleted } from '../lists/listsSlice.js';
 
 const listItemSlice = createSlice({
   name: 'listItem',
-  initialState: {},
+  initialState: {
+    byId: {},
+    allIds: [],
+  },
   reducers: {
     itemAddedToList(state, action) {
       const { itemId, listId } = action.payload;
