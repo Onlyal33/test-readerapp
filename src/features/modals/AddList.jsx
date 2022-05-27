@@ -6,7 +6,7 @@ import {
 import { Formik, Form } from 'formik';
 
 import useModal from '../../common/useModal.js';
-import useValidation from '../../common/useValidation.js';
+import getValidationSchema from '../../common/validationSchema.js';
 import { listCreated } from '../lists/listsSlice.js';
 
 // generate list id from last id saved in state
@@ -34,7 +34,7 @@ const CreateList = () => {
   const modalRef = useRef();
   const dispatch = useDispatch();
   const store = useStore();
-  const validationSchema = useValidation(listNames);
+  const validationSchema = getValidationSchema(listNames);
   const { hideModal } = useModal();
   useEffect(() => {
     modalRef.current.focus();

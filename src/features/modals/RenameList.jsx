@@ -7,7 +7,7 @@ import {
 import { Formik, Form } from 'formik';
 
 import useModal from '../../common/useModal.js';
-import useValidation from '../../common/useValidation.js';
+import getValidationSchema from '../../common/validationSchema.js';
 import { listRenamed, selectLists, selectListsIds } from '../lists/listsSlice.js';
 
 const generateOnSubmit = ({ hideModal, dispatch, item: { id } }) => ({ name }) => {
@@ -26,7 +26,7 @@ const RenameList = ({ item }) => {
   const listNames = useSelector((state) => selectListNamesExceptCurrent(state, item.id));
   const modalRef = useRef();
   const dispatch = useDispatch();
-  const validationSchema = useValidation(listNames);
+  const validationSchema = getValidationSchema(listNames);
   const { hideModal } = useModal();
   useEffect(() => {
     modalRef.current.select();

@@ -1,11 +1,11 @@
 import { Button } from 'react-bootstrap';
 import { useStore } from 'react-redux';
 
-import useLocalStorage from '../common/useLocalStorage';
+import getLocalStorageFunc from '../common/localStorage.js';
 
 const SaveButton = () => {
   const store = useStore();
-  const { saveToLocalStorage } = useLocalStorage();
+  const saveToLocalStorage = getLocalStorageFunc('save');
   const handleClick = () => {
     const { searchResults, ...state } = store.getState().entities;
     saveToLocalStorage(state);

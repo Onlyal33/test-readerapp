@@ -8,10 +8,10 @@ import listsReducer from '../features/lists/listsSlice.js';
 import uiReducer from '../features/uiSlice.js';
 import listItemReducer from '../features/items/listItemSlice.js';
 import searchResultsReducer from '../features/search/searchResultsSlice.js';
-import useLocalStorage from '../common/useLocalStorage.js';
+import getLocalStorageFunc from '../common/localStorage.js';
 
 const initialize = () => {
-  const { loadFromLocalStorage } = useLocalStorage();
+  const loadFromLocalStorage = getLocalStorageFunc('load');
   const localState = loadFromLocalStorage();
 
   const store = configureStore({
