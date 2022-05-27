@@ -1,14 +1,9 @@
 const host = 'https://openlibrary.org';
 
 export default {
-  search: (data) => {
+  search: (searchParams) => {
     const url = new URL('search.json', host);
-    url.search = data.all ? new URLSearchParams({ q: data.all }) : null;
-    return url;
-  },
-  advancedSearch: (data) => {
-    const url = new URL('search.json', host);
-    url.search = new URLSearchParams(data);
+    url.search = new URLSearchParams(searchParams);
     return url;
   },
   fetchBook: (id) => {

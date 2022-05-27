@@ -7,8 +7,7 @@ import { selectLibraryItem } from './itemsSlice.js';
 import { activeItemChanged, selectIsItemActive } from '../uiSlice.js';
 import LibraryItemDropdown from './LibraryItemDropdown.jsx';
 import SearchItemDropdown from './SearchitemDropdown.jsx';
-import useAPI from '../../common/useAPI.js';
-import { selectSearchItem } from '../search/searchResultsSlice.js';
+import { fetchDetalisedItemById, selectSearchItem } from '../search/searchResultsSlice.js';
 
 const dropdowns = {
   library: LibraryItemDropdown,
@@ -32,16 +31,13 @@ const Item = ({ type, id }) => {
   const isItemActive = useSelector(selectIsItemActive(id));
   const item = useSelector(selectItem(type, id), shallowEqual);
   const {
-    title, author, firstPublishYear, detalised,
+    title, author, firstPublishYear,
   } = item;
 
   const dispatch = useDispatch();
-  const { handleFetch } = useAPI();
 
-  const handleSelectItem = async () => {
-    if (type === 'search' && !detalised) {
-      await handleFetch(id);
-    }
+  const handleSelectItem = () => {
+    dispatch(fetchDetalisedItemById(id));
     dispatch(activeItemChanged({ id }));
   };
 

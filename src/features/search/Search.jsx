@@ -5,13 +5,12 @@ import { Formik, Form } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 
 import SearchInput from './SearchInput.jsx';
-import useAPI from '../../common/useAPI.js';
+import { fetchSearchedItems } from './searchResultsSlice.js';
 import { advancedSearchVisibilityChanged, selectIsAdvancedSearchVisible } from '../uiSlice.js';
 
 const Search = () => {
   const searchVisibility = useSelector(selectIsAdvancedSearchVisible);
   const dispatch = useDispatch();
-  const { handleSearch } = useAPI('search');
 
   const toggleAdvancedSearch = (e) => {
     e.preventDefault();
@@ -21,14 +20,14 @@ const Search = () => {
   return searchVisibility !== 'visible' ? (
     <Formik
       initialValues={{
-        all: '',
+        q: '',
       }}
-      onSubmit={handleSearch}
+      onSubmit={(values, actions) => dispatch(fetchSearchedItems(values, actions))}
     >
       {({ isSubmitting }) => (
         <Form as={Container} className="flex-grow-1">
           <InputGroup>
-            <SearchInput name="all" disabled={isSubmitting} />
+            <SearchInput name="q" disabled={isSubmitting} />
             <Button variant="primary" type="submit" disabled={isSubmitting}>Search</Button>
             <Button onClick={toggleAdvancedSearch} variant="outline-primary">Show Advanced</Button>
           </InputGroup>

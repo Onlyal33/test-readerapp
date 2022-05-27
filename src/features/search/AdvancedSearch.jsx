@@ -1,16 +1,16 @@
 import {
   Button, Row, Col, Container,
 } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form } from 'formik';
 
 import SearchInput from './SearchInput.jsx';
-import useAPI from '../../common/useAPI.js';
 import { selectIsAdvancedSearchVisible } from '../uiSlice.js';
+import { fetchSearchedItems } from './searchResultsSlice.js';
 
 const AdvancedSearch = () => {
   const searchVisibility = useSelector(selectIsAdvancedSearchVisible);
-  const { handleSearch } = useAPI('advancedSearch');
+  const dispatch = useDispatch();
 
   return searchVisibility === 'visible' ? (
     <Formik
@@ -22,7 +22,7 @@ const AdvancedSearch = () => {
         person: '',
         language: '',
       }}
-      onSubmit={handleSearch}
+      onSubmit={(values, actions) => dispatch(fetchSearchedItems(values, actions))}
     >
       {({ isSubmitting }) => (
         <Form as={Container} className="my-2">

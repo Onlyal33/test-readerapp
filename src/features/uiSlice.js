@@ -91,3 +91,5 @@ export const selectIsListActive = (id) => (state) => state.ui.activeList === id;
 export const selectIsItemActive = (id) => (state) => state.ui.activeItem === id;
 
 export const selectActiveListId = (state) => state.ui.activeList;
+
+export const selectActiveItemId = (state) => state.ui.activeItem;

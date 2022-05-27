@@ -1,16 +1,32 @@
 import {
   Card, Button, Tabs, Tab,
 } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 import { useState } from 'react';
+import { createSelector } from '@reduxjs/toolkit';
 
 import Notes from './Notes';
+import { selectLibraryItems } from './items/itemsSlice';
+import { selectSearchItems } from './search/searchResultsSlice';
+import { selectActiveItemId } from './uiSlice';
 
-const selectActiveItem = (state) => state.entities.items.byId[state.ui.activeItem]
-  ?? state.entities.searchResults.byId[state.ui.activeItem];
+const selectLibraryItem = createSelector(
+  [selectLibraryItems, selectActiveItemId],
+  (libraryItems, activeItemId) => libraryItems[activeItemId],
+);
+
+const selectSearchItem = createSelector(
+  [selectSearchItems, selectActiveItemId],
+  (searchItems, activeItemId) => searchItems[activeItemId],
+);
+
+const selectActiveItem = createSelector(
+  [selectLibraryItem, selectSearchItem],
+  (libraryItem, searchItem) => libraryItem ?? searchItem,
+);
 
 const Contents = () => {
-  const activeItem = useSelector(selectActiveItem);
+  const activeItem = useSelector(selectActiveItem, shallowEqual);
   const [openNotes, setOpenNotes] = useState(false);
 
   if (!activeItem) {
