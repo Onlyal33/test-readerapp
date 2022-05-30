@@ -3,18 +3,31 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { listDeleted } from './lists/listsSlice.js';
 import { itemRemovedFromLibrary } from './items/itemsSlice.js';
-import { searchCompleted, searchHidden } from './search/searchResultsSlice.js';
+import { fetchItemById, fetchSearchResults, searchHidden } from './search/searchResultsSlice.js';
 
 const uiSlice = createSlice({
   name: 'ui',
   initialState: {
     activeList: null,
     activeItem: null,
-    searchVisibility: 'invisible',
     readItemsVisibility: 'all',
     displayingItemType: 'library',
-    modals: { isOpen: false, type: null, item: null },
-    searchResultsNumber: null,
+    search: {
+      visibility: 'invisible',
+      resultsNumber: null,
+      status: 'idle',
+      error: null,
+      searchResultsNumber: null,
+    },
+    fetchItem: {
+      status: 'idle',
+      error: null,
+    },
+    modals: {
+      isOpen: false,
+      type: null,
+      item: null,
+    },
   },
   reducers: {
     modalOpened(state, action) {
@@ -36,7 +49,7 @@ const uiSlice = createSlice({
       state.activeItem = action.payload.id;
     },
     advancedSearchVisibilityChanged(state) {
-      state.searchVisibility = state.searchVisibility === 'visible' ? 'invisible' : 'visible';
+      state.search.visibility = state.search.visibility === 'visible' ? 'invisible' : 'visible';
     },
     readItemsVisibilityChanged(state) {
       state.readItemsVisibility = state.readItemsVisibility === 'all' ? 'unread' : 'all';
@@ -56,13 +69,32 @@ const uiSlice = createSlice({
           state.activeItem = null;
         }
       })
-      .addCase(searchCompleted, (state, action) => {
+      .addCase(fetchSearchResults.pending, (state) => {
+        state.search.status = 'loading';
+      })
+      .addCase(fetchSearchResults.fulfilled, (state, action) => {
+        state.search.status = 'succeeded';
         state.displayingItemType = 'search';
-        state.searchResultsNumber = action.payload.searchResultsNumber;
+        state.search.resultsNumber = action.payload.searchResultsNumber;
+      })
+      .addCase(fetchSearchResults.rejected, (state, action) => {
+        state.search.status = 'failed';
+        state.search.error = action.error.message;
+      })
+      .addCase(fetchItemById.pending, (state) => {
+        state.fetchItem.status = 'loading';
+      })
+      .addCase(fetchItemById.fulfilled, (state) => {
+        state.fetchItem.status = 'idle';
+      })
+      .addCase(fetchItemById.rejected, (state, action) => {
+        state.fetchItem.status = 'failed';
+        state.fetchItem.error = action.error.message;
       })
       .addCase(searchHidden, (state) => {
         state.displayingItemType = 'library';
-        state.searchResultsNumber = null;
+        state.search.status = 'idle';
+        state.search.resultsNumber = null;
       });
   },
 });
@@ -80,11 +112,11 @@ export default uiSlice.reducer;
 
 export const selectDisplayingItemType = (state) => state.ui.displayingItemType;
 
-export const selectSearchResultsNumber = (state) => state.ui.searchResultsNumber;
+export const selectSearchResultsNumber = (state) => state.ui.search.resultsNumber;
 
 export const selectReadItemsVisibility = (state) => state.ui.readItemsVisibility;
 
-export const selectIsAdvancedSearchVisible = (state) => state.ui.searchVisibility;
+export const selectIsAdvancedSearchVisible = (state) => state.ui.search.visibility;
 
 export const selectIsListActive = (id) => (state) => state.ui.activeList === id;
 
@@ -93,3 +125,5 @@ export const selectIsItemActive = (id) => (state) => state.ui.activeItem === id;
 export const selectActiveListId = (state) => state.ui.activeList;
 
 export const selectActiveItemId = (state) => state.ui.activeItem;
+
+export const selectSearchStatus = (state) => state.ui.search.status;

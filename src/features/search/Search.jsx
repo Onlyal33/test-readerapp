@@ -5,7 +5,8 @@ import { Formik, Form } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 
 import SearchInput from './SearchInput.jsx';
-import { fetchSearchedItems } from './searchResultsSlice.js';
+import SearchButton from './SearchButton.jsx';
+import { fetchSearchResults } from './searchResultsSlice.js';
 import { advancedSearchVisibilityChanged, selectIsAdvancedSearchVisible } from '../uiSlice.js';
 
 const Search = () => {
@@ -22,13 +23,13 @@ const Search = () => {
       initialValues={{
         q: '',
       }}
-      onSubmit={(values, actions) => dispatch(fetchSearchedItems(values, actions))}
+      onSubmit={(values, actions) => dispatch(fetchSearchResults({ values, actions }))}
     >
       {({ isSubmitting }) => (
         <Form as={Container} className="flex-grow-1">
           <InputGroup>
             <SearchInput name="q" disabled={isSubmitting} />
-            <Button variant="primary" type="submit" disabled={isSubmitting}>Search</Button>
+            <SearchButton disabled={isSubmitting} />
             <Button onClick={toggleAdvancedSearch} variant="outline-primary">Show Advanced</Button>
           </InputGroup>
         </Form>

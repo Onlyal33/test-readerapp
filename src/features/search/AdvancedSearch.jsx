@@ -1,12 +1,13 @@
 import {
-  Button, Row, Col, Container,
+  Row, Col, Container,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form } from 'formik';
 
 import SearchInput from './SearchInput.jsx';
 import { selectIsAdvancedSearchVisible } from '../uiSlice.js';
-import { fetchSearchedItems } from './searchResultsSlice.js';
+import { fetchSearchResults } from './searchResultsSlice.js';
+import SearchButton from './SearchButton.jsx';
 
 const AdvancedSearch = () => {
   const searchVisibility = useSelector(selectIsAdvancedSearchVisible);
@@ -22,7 +23,7 @@ const AdvancedSearch = () => {
         person: '',
         language: '',
       }}
-      onSubmit={(values, actions) => dispatch(fetchSearchedItems(values, actions))}
+      onSubmit={(values, actions) => dispatch(fetchSearchResults({ values, actions }))}
     >
       {({ isSubmitting }) => (
         <Form as={Container} className="my-2">
@@ -52,7 +53,7 @@ const AdvancedSearch = () => {
           </Row>
           <Row className="mb-2">
             <Col>
-              <Button variant="primary" type="submit" disabled={isSubmitting}>Search</Button>
+              <SearchButton disabled={isSubmitting} />
             </Col>
           </Row>
         </Form>

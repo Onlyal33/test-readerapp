@@ -6,7 +6,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { selectLibraryItem } from './itemsSlice.js';
 import { activeItemChanged, selectIsItemActive } from '../uiSlice.js';
 import LibraryItemDropdown from './LibraryItemDropdown.jsx';
-import SearchItemDropdown from './SearchitemDropdown.jsx';
+import SearchItemDropdown from './SearchItemDropdown.jsx';
 import { fetchDetalisedItemById, selectSearchItem } from '../search/searchResultsSlice.js';
 
 const dropdowns = {

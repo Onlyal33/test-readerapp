@@ -1,7 +1,29 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import searchAPI from '../../common/searchAPI.js';
+
+export const fetchSearchResults = createAsyncThunk(
+  'searchResults/fetchSearchResults',
+  async ({ values, actions }) => {
+    const filteredEntries = Object.entries(values).filter(([, value]) => value !== '');
+    const { data } = await searchAPI.search(Object.fromEntries(filteredEntries));
+    actions.resetForm();
+    return { items: data.docs, searchResultsNumber: data.numFound };
+  /*
+catch (e) {
+    actions.setErrors(e);
+  } */
+  },
+);
+
+export const fetchItemById = createAsyncThunk(
+  'searchResults/fetchItemById',
+  async (id) => {
+    const { data } = await searchAPI.fetchItemById(id);
+    return { id, data };
+  },
+);
 
 const searchResults = createSlice({
   name: 'searchResults',
@@ -10,40 +32,6 @@ const searchResults = createSlice({
     allIds: [],
   },
   reducers: {
-    searchCompleted(state, action) {
-      const byId = {};
-      const allIds = [];
-      const languageNames = new Intl.DisplayNames(['en'], {
-        type: 'language',
-      });
-      action.payload.items.forEach(({
-        key: id,
-        author_name: author,
-        first_publish_year: firstPublishYear,
-        language = [],
-        place = [],
-        subject = [],
-        title,
-      }) => {
-        byId[id] = {
-          id,
-          author,
-          firstPublishYear,
-          language: language.map((el) => languageNames.of(el)),
-          place,
-          subject,
-          title,
-        };
-        allIds.push(id);
-      });
-      state.byId = byId;
-      state.allIds = allIds;
-    },
-    itemUpdatedInSearchResults(state, action) {
-      const { description } = action.payload.data;
-      state.byId[action.payload.id].description = description?.value ?? description;
-      state.byId[action.payload.id].detalised = true;
-    },
     searchHidden(state) {
       if (state.allIds.length > 0) {
         state.byId = {};
@@ -51,10 +39,46 @@ const searchResults = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchSearchResults.fulfilled, (state, action) => {
+        const byId = {};
+        const allIds = [];
+        const languageNames = new Intl.DisplayNames(['en'], {
+          type: 'language',
+        });
+        action.payload.items.forEach(({
+          key: id,
+          author_name: author,
+          first_publish_year: firstPublishYear,
+          language = [],
+          place = [],
+          subject = [],
+          title,
+        }) => {
+          byId[id] = {
+            id,
+            author,
+            firstPublishYear,
+            language: language.map((el) => languageNames.of(el)),
+            place,
+            subject,
+            title,
+          };
+          allIds.push(id);
+        });
+        state.byId = byId;
+        state.allIds = allIds;
+      })
+      .addCase(fetchItemById.fulfilled, (state, action) => {
+        const { description } = action.payload.data;
+        state.byId[action.payload.id].description = description?.value ?? description;
+        state.byId[action.payload.id].detalised = true;
+      });
+  },
 });
 
 export const {
-  searchCompleted,
   itemUpdatedInSearchResults,
   searchHidden,
 } = searchResults.actions;
@@ -70,29 +94,9 @@ export const selectSearchItem = (id) => (state) => state.entities.searchResults.
 export const selectIsItemDetalised = (id) => (state) => state
   .entities.searchResults.byId[id].detalised;
 // thunks
-export const fetchSearchedItems = (values, actions) => async (dispatch) => {
-  const filteredEntries = Object.entries(values).filter(([, value]) => value !== '');
-  try {
-    const { data } = await searchAPI.search(Object.fromEntries(filteredEntries));
-    actions.setSubmitting(false);
-    actions.resetForm();
-    dispatch(searchCompleted({ items: data.docs, searchResultsNumber: data.numFound }));
-  } catch (e) {
-    actions.setSubmitting(false);
-    console.log(e);
-    actions.setErrors(e);
-  }
-};
-
 export const fetchDetalisedItemById = (id) => async (dispatch, getState) => {
   if (getState().ui.displayingItemType !== 'search' || selectIsItemDetalised(id)(getState())) {
     return;
   }
-
-  try {
-    const { data } = await searchAPI.fetchItemById(id);
-    dispatch(itemUpdatedInSearchResults({ id, data }));
-  } catch (e) {
-    console.log(e);
-  }
+  await dispatch(fetchItemById(id));
 };
