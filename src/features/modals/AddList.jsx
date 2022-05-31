@@ -4,6 +4,7 @@ import {
   Modal, Button, FormControl, InputGroup,
 } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
+import { toast } from 'react-toastify';
 
 import useModal from '../../common/useModal.js';
 import getValidationSchema from '../../common/validationSchema.js';
@@ -25,6 +26,7 @@ const generateOnSubmit = ({ hideModal, dispatch, store }) => ({ name }) => {
   const id = getNewId(allIds);
   dispatch(listCreated({ name, id }));
   hideModal();
+  toast.success(`List ${name} has been created`);
 };
 
 const selectListNames = (state) => Object.values(state.entities.lists.byId).map(({ name }) => name);

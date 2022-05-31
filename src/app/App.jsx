@@ -1,6 +1,7 @@
 import {
   Container, Row, Col, Navbar,
 } from 'react-bootstrap';
+import { ToastContainer } from 'react-toastify';
 
 import HeaderFilter from '../features/HeaderFilter.jsx';
 import Search from '../features/search/Search.jsx';
@@ -11,6 +12,7 @@ import Items from '../features/items/Items.jsx';
 import AdvancedSearch from '../features/search/AdvancedSearch.jsx';
 import Contents from '../features/Contents.jsx';
 import ModalFactory from '../features/modals/ModalFactory.jsx';
+import ErrorToasts from '../features/ErrorToasts.jsx';
 
 const App = () => (
   <Container fluid className="d-flex flex-column vh-100 p-3">
@@ -40,6 +42,8 @@ const App = () => (
       </Col>
     </Row>
     <ModalFactory />
+    <ToastContainer />
+    <ErrorToasts />
   </Container>
 );
 

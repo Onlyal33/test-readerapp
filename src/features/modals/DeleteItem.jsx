@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 import useModal from '../../common/useModal.js';
 import { itemRemovedFromLibrary } from '../items/itemsSlice.js';
@@ -14,6 +15,7 @@ const DeleteItem = ({ item }) => {
     e.preventDefault();
     dispatch(itemRemovedFromLibrary(item));
     hideModal();
+    toast.success(`${item.title} has been deleted from your library`);
   };
 
   useEffect(() => {

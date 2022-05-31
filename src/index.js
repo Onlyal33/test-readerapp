@@ -2,6 +2,7 @@ import 'core-js/stable/index.js';
 import 'regenerator-runtime/runtime.js';
 import { createRoot } from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 import initialize from './app/initialize.jsx';
 

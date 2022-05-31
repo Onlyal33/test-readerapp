@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { createSelector } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 
 import useModal from '../../common/useModal.js';
 import { itemRemovedFromList, selectListItem } from '../items/listItemSlice.js';
@@ -16,15 +17,16 @@ const selectListsToRemoveItemFrom = createSelector(
 
 const RemoveItemFromList = ({ item }) => {
   const lists = useSelector((state) => selectListsToRemoveItemFrom(state, item.id));
-  const [listId, setListId] = useState(lists[0].id);
+  const [list, setList] = useState(lists[0]);
   const modalRef = useRef();
   const dispatch = useDispatch();
   const { hideModal } = useModal();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(itemRemovedFromList({ listId, itemId: item.id }));
+    dispatch(itemRemovedFromList({ listId: list.id, itemId: item.id }));
     hideModal();
+    toast.success(`${item.title} has been removed from list ${list.name}`);
   };
 
   useEffect(() => {
@@ -48,10 +50,10 @@ const RemoveItemFromList = ({ item }) => {
             id="listId"
             ref={modalRef}
             aria-label="select list"
-            value={listId}
-            onChange={(e) => setListId(e.target.value)}
+            value={list}
+            onChange={(e) => setList(e.target.value)}
           >
-            {lists.map(({ id, name }) => <option value={id} key={id}>{name}</option>)}
+            {lists.map((el) => <option value={el} key={el.id}>{el.name}</option>)}
           </Form.Select>
         </Modal.Body>
         <Modal.Footer>

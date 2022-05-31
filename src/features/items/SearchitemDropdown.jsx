@@ -1,5 +1,6 @@
 import { Dropdown } from 'react-bootstrap';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import useModal from '../../common/useModal.js';
 import { itemAddedToLibrary, selectIsItemInLibrary } from './itemsSlice.js';
@@ -13,6 +14,7 @@ const SearchItemDropdown = ({ id }) => {
 
   const handleClick = () => {
     dispatch(fetchDetalisedItemById(id));
+    toast.success(`${item.title} has been added to library`);
     dispatch(itemAddedToLibrary(item));
   };
 

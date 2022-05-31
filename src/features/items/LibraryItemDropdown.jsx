@@ -2,6 +2,7 @@ import { Dropdown } from 'react-bootstrap';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import { createSelector } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 
 import { readStatusToggled, selectLibraryItem } from './itemsSlice.js';
 import useModal from '../../common/useModal.js';
@@ -36,7 +37,10 @@ const LibraryItemDropdown = ({ id }) => {
 
   const dispatch = useDispatch();
   const { showModal } = useModal();
-  const toggleRead = () => dispatch(readStatusToggled({ id }));
+  const toggleRead = () => {
+    dispatch(readStatusToggled({ id }));
+    toast.success(`${item.title} has been marked as ${item.isRead ? 'not read' : 'read'}`);
+  };
 
   return (
     <Dropdown.Menu>

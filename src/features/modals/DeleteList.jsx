@@ -1,18 +1,20 @@
 import { useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, Modal, Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 import useModal from '../../common/useModal.js';
 import { listDeleted } from '../lists/listsSlice.js';
 
-const generateOnSubmit = ({ hideModal, dispatch, item }) => (e) => {
+const generateOnSubmit = ({ hideModal, dispatch, list }) => (e) => {
   e.preventDefault();
-  dispatch(listDeleted(item));
+  dispatch(listDeleted(list));
   hideModal();
+  toast.success(`List ${list.title} has been deleted from your library`);
 };
 
-const DeleteList = ({ item }) => {
-  const { name } = item;
+const DeleteList = ({ item: list }) => {
+  const { name } = list;
   const modalRef = useRef();
   const dispatch = useDispatch();
   const { hideModal } = useModal();
@@ -37,7 +39,7 @@ const DeleteList = ({ item }) => {
         <Button variant="secondary" onClick={hideModal}>Cancel</Button>
         <Form
           onSubmit={generateOnSubmit({
-            dispatch, hideModal, item,
+            dispatch, hideModal, list,
           })}
         >
           <Form.Control

@@ -12,16 +12,15 @@ const uiSlice = createSlice({
     activeItem: null,
     readItemsVisibility: 'all',
     displayingItemType: 'library',
+    networkError: null,
     search: {
       visibility: 'invisible',
       resultsNumber: null,
       status: 'idle',
-      error: null,
       searchResultsNumber: null,
     },
     fetchItem: {
       status: 'idle',
-      error: null,
     },
     modals: {
       isOpen: false,
@@ -54,6 +53,9 @@ const uiSlice = createSlice({
     readItemsVisibilityChanged(state) {
       state.readItemsVisibility = state.readItemsVisibility === 'all' ? 'unread' : 'all';
     },
+    errorMessageShown(state) {
+      state.networkError = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -71,6 +73,7 @@ const uiSlice = createSlice({
       })
       .addCase(fetchSearchResults.pending, (state) => {
         state.search.status = 'loading';
+        state.networkError = null;
       })
       .addCase(fetchSearchResults.fulfilled, (state, action) => {
         state.search.status = 'succeeded';
@@ -79,17 +82,18 @@ const uiSlice = createSlice({
       })
       .addCase(fetchSearchResults.rejected, (state, action) => {
         state.search.status = 'failed';
-        state.search.error = action.error.message;
+        state.networkError = action.error.message;
       })
       .addCase(fetchItemById.pending, (state) => {
         state.fetchItem.status = 'loading';
+        state.networkError = null;
       })
       .addCase(fetchItemById.fulfilled, (state) => {
         state.fetchItem.status = 'idle';
       })
       .addCase(fetchItemById.rejected, (state, action) => {
         state.fetchItem.status = 'failed';
-        state.fetchItem.error = action.error.message;
+        state.networkError = action.error.message;
       })
       .addCase(searchHidden, (state) => {
         state.displayingItemType = 'library';
@@ -106,6 +110,7 @@ export const {
   activeItemChanged,
   advancedSearchVisibilityChanged,
   readItemsVisibilityChanged,
+  errorMessageShown,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
@@ -127,3 +132,5 @@ export const selectActiveListId = (state) => state.ui.activeList;
 export const selectActiveItemId = (state) => state.ui.activeItem;
 
 export const selectSearchStatus = (state) => state.ui.search.status;
+
+export const selectNetworkError = (state) => state.ui.networkError;

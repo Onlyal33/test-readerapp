@@ -5,14 +5,16 @@ import {
   Modal, Button, FormControl, InputGroup,
 } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
+import { toast } from 'react-toastify';
 
 import useModal from '../../common/useModal.js';
 import getValidationSchema from '../../common/validationSchema.js';
 import { listRenamed, selectLists, selectListsIds } from '../lists/listsSlice.js';
 
-const generateOnSubmit = ({ hideModal, dispatch, item: { id } }) => ({ name }) => {
-  dispatch(listRenamed({ name, id }));
+const generateOnSubmit = ({ hideModal, dispatch, list }) => ({ name }) => {
+  dispatch(listRenamed({ name, id: list.id }));
   hideModal();
+  toast.success(`List ${list.name} has been renamed to ${name}`);
 };
 
 const selectListNamesExceptCurrent = createSelector(
@@ -22,8 +24,8 @@ const selectListNamesExceptCurrent = createSelector(
     .map((listId) => (lists[listId].name)),
 );
 
-const RenameList = ({ item }) => {
-  const listNames = useSelector((state) => selectListNamesExceptCurrent(state, item.id));
+const RenameList = ({ item: list }) => {
+  const listNames = useSelector((state) => selectListNamesExceptCurrent(state, list.id));
   const modalRef = useRef();
   const dispatch = useDispatch();
   const validationSchema = getValidationSchema(listNames);
@@ -39,11 +41,11 @@ const RenameList = ({ item }) => {
       </Modal.Header>
       <Formik
         initialValues={{
-          name: item.name,
+          name: list.name,
         }}
         validationSchema={validationSchema}
         onSubmit={generateOnSubmit({
-          hideModal, dispatch, item,
+          hideModal, dispatch, list,
         })}
       >
         {({
