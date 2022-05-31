@@ -10,7 +10,7 @@ const generateOnSubmit = ({ hideModal, dispatch, list }) => (e) => {
   e.preventDefault();
   dispatch(listDeleted(list));
   hideModal();
-  toast.success(`List ${list.title} has been deleted from your library`);
+  toast.success(`List ${list.name} has been deleted from your library`);
 };
 
 const DeleteList = ({ item: list }) => {
