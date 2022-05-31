@@ -10,10 +10,6 @@ export const fetchSearchResults = createAsyncThunk(
     const { data } = await searchAPI.search(Object.fromEntries(filteredEntries));
     actions.resetForm();
     return { items: data.docs, searchResultsNumber: data.numFound };
-  /*
-catch (e) {
-    actions.setErrors(e);
-  } */
   },
 );
 
@@ -93,7 +89,7 @@ export const selectSearchItem = (id) => (state) => state.entities.searchResults.
 
 export const selectIsItemDetalised = (id) => (state) => state
   .entities.searchResults.byId[id].detalised;
-// thunks
+
 export const fetchDetalisedItemById = (id) => async (dispatch, getState) => {
   if (getState().ui.displayingItemType !== 'search' || selectIsItemDetalised(id)(getState())) {
     return;
