@@ -1,14 +1,16 @@
 import { Button } from 'react-bootstrap';
 import { useStore } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import getLocalStorageFunc from '../common/localStorage.js';
 
 const SaveButton = () => {
   const store = useStore();
-  const saveToLocalStorage = getLocalStorageFunc('save');
+  const saveState = getLocalStorageFunc('save');
   const handleClick = () => {
     const { searchResults, ...state } = store.getState().entities;
-    saveToLocalStorage(state);
+    saveState(state);
+    toast.info('Your data has been saved');
   };
 
   return (
