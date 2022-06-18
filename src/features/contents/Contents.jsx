@@ -6,8 +6,8 @@ import { useState } from 'react';
 import { createSelector } from '@reduxjs/toolkit';
 
 import Notes from './Notes.jsx';
-import { selectLibraryItem, selectIsItemInLibrary } from '../items/itemsSlice';
-import { selectSearchItem } from '../search/searchResultsSlice';
+import { selectLibraryItem, selectIsItemInLibrary } from '../items/itemsSlice.js';
+import { selectSearchItem } from '../search/searchResultsSlice.js';
 
 const selectItem = createSelector(
   [selectIsItemInLibrary, selectLibraryItem, selectSearchItem],
