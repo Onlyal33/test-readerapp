@@ -3,6 +3,7 @@ import {
 } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRef } from 'react';
 
 import SearchInput from './SearchInput.jsx';
 import SearchButton from './SearchButton.jsx';
@@ -12,6 +13,7 @@ import { advancedSearchVisibilityChanged, selectIsAdvancedSearchVisible } from '
 const Search = () => {
   const searchVisibility = useSelector(selectIsAdvancedSearchVisible);
   const dispatch = useDispatch();
+  const searchRef = useRef();
 
   const handleTogglingAdvancedSearchVisibility = (e) => {
     e.preventDefault();
@@ -28,7 +30,7 @@ const Search = () => {
       {({ isSubmitting }) => (
         <Form as={Container} className="flex-grow-1">
           <InputGroup>
-            <SearchInput name="q" disabled={isSubmitting} />
+            <SearchInput name="q" disabled={isSubmitting} ref={searchRef} />
             <SearchButton disabled={isSubmitting} />
             <Button onClick={handleTogglingAdvancedSearchVisibility} variant="outline-primary">Show Advanced</Button>
           </InputGroup>

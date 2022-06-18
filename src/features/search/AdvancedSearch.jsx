@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import {
   Row, Col, Container,
 } from 'react-bootstrap';
@@ -12,6 +13,7 @@ import SearchButton from './SearchButton.jsx';
 const AdvancedSearch = () => {
   const searchVisibility = useSelector(selectIsAdvancedSearchVisible);
   const dispatch = useDispatch();
+  const searchRef = useRef();
 
   return searchVisibility === 'visible' && (
     <Formik
@@ -23,16 +25,16 @@ const AdvancedSearch = () => {
         person: '',
         language: '',
       }}
-      onSubmit={(values, actions) => dispatch(fetchSearchResults({ values, actions }))}
+      onSubmit={(values, actions) => dispatch(fetchSearchResults({ values, actions, searchRef }))}
     >
       {({ isSubmitting }) => (
         <Form as={Container} className="my-2">
           <Row className="mb-2">
             <Col className="pe-1">
-              <SearchInput name="author" label="Author" disabled={isSubmitting} />
+              <SearchInput ref={searchRef} name="title" label="Title" disabled={isSubmitting} />
             </Col>
             <Col className="ps-1">
-              <SearchInput name="title" label="Title" disabled={isSubmitting} />
+              <SearchInput name="author" label="Author" disabled={isSubmitting} />
             </Col>
           </Row>
           <Row className="mb-2">
