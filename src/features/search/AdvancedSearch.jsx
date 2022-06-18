@@ -1,19 +1,17 @@
 import {
   Row, Col, Container,
 } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
 
 import SearchInput from './SearchInput.jsx';
-import { selectIsAdvancedSearchVisible } from '../uiSlice.js';
 import { fetchSearchResults } from './searchResultsSlice.js';
 import SearchButton from './SearchButton.jsx';
 
 const AdvancedSearch = () => {
-  const searchVisibility = useSelector(selectIsAdvancedSearchVisible);
   const dispatch = useDispatch();
 
-  return searchVisibility === 'visible' ? (
+  return (
     <Formik
       initialValues={{
         author: '',
@@ -59,7 +57,7 @@ const AdvancedSearch = () => {
         </Form>
       )}
     </Formik>
-  ) : null;
+  );
 };
 
 export default AdvancedSearch;

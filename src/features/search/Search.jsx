@@ -13,7 +13,7 @@ const Search = () => {
   const searchVisibility = useSelector(selectIsAdvancedSearchVisible);
   const dispatch = useDispatch();
 
-  const toggleAdvancedSearch = (e) => {
+  const handleTogglingAdvancedSearchVisibility = (e) => {
     e.preventDefault();
     dispatch(advancedSearchVisibilityChanged());
   };
@@ -30,14 +30,14 @@ const Search = () => {
           <InputGroup>
             <SearchInput name="q" disabled={isSubmitting} />
             <SearchButton disabled={isSubmitting} />
-            <Button onClick={toggleAdvancedSearch} variant="outline-primary">Show Advanced</Button>
+            <Button onClick={handleTogglingAdvancedSearchVisibility} variant="outline-primary">Show Advanced</Button>
           </InputGroup>
         </Form>
       )}
     </Formik>
   )
     : (
-      <Button onClick={toggleAdvancedSearch} variant="outline-primary" className="ms-auto text-truncate">
+      <Button onClick={handleTogglingAdvancedSearchVisibility} variant="outline-primary" className="ms-auto text-truncate">
         Hide Advanced Search
       </Button>
     );

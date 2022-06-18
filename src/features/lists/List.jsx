@@ -15,7 +15,7 @@ const List = ({ id }) => {
   const dispatch = useDispatch();
   const { showModal } = useModal();
 
-  const handleSelectList = () => {
+  const handleListSelection = () => {
     dispatch(activeListChanged({ id }));
     dispatch(searchHidden());
   };
@@ -23,7 +23,7 @@ const List = ({ id }) => {
   if (list.type !== 'user') {
     return (
       <Nav.Item key={id} className="w-100">
-        <Button onClick={handleSelectList} variant={variant} className="w-100 text-start text-truncate">{list.name}</Button>
+        <Button onClick={handleListSelection} variant={variant} className="w-100 text-start text-truncate">{list.name}</Button>
       </Nav.Item>
     );
   }
@@ -31,7 +31,7 @@ const List = ({ id }) => {
   return (
     <Nav.Item key={id} className="w-100">
       <Dropdown as={ButtonGroup} className="d-flex">
-        <Button onClick={handleSelectList} variant={variant} className="w-100 border-end-0 text-start text-truncate">{list.name}</Button>
+        <Button onClick={handleListSelection} variant={variant} className="w-100 border-end-0 text-start text-truncate">{list.name}</Button>
         <Dropdown.Toggle split variant={variant} className="border-start-0" />
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => showModal('deleteList', list)}>Remove List</Dropdown.Item>

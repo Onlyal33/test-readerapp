@@ -37,16 +37,16 @@ const LibraryItemDropdown = ({ id }) => {
 
   const dispatch = useDispatch();
   const { showModal } = useModal();
-  const toggleRead = () => {
+  const handleTogglingReadStatus = () => {
     dispatch(readStatusToggled({ id }));
     toast.success(`${item.title} has been marked as ${item.isRead ? 'not read' : 'read'}`);
   };
 
   return (
     <Dropdown.Menu>
-      {hasListsToAddItemTo ? <Dropdown.Item onClick={() => showModal('addItemToList', item)}>Add to List</Dropdown.Item> : null}
-      {hasListsToRemoveItemFrom ? <Dropdown.Item onClick={() => showModal('removeItemFromList', item)}>Remove from List</Dropdown.Item> : null}
-      <Dropdown.Item onClick={toggleRead}>
+      {hasListsToAddItemTo && <Dropdown.Item onClick={() => showModal('addItemToList', item)}>Add to List</Dropdown.Item>}
+      {hasListsToRemoveItemFrom && <Dropdown.Item onClick={() => showModal('removeItemFromList', item)}>Remove from List</Dropdown.Item>}
+      <Dropdown.Item onClick={handleTogglingReadStatus}>
         Mark as
         {' '}
         {item.isRead ? 'Unread' : 'Read'}

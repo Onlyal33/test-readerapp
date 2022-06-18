@@ -29,13 +29,10 @@ const Contents = () => {
   const activeItem = useSelector(selectActiveItem, shallowEqual);
   const [openNotes, setOpenNotes] = useState(false);
 
-  if (!activeItem) {
-    return null;
-  }
-
   const {
     title, author, firstPublishYear, description, place, language, subject, notes, id,
-  } = activeItem;
+  } = item;
+
   return (
     <Card className="border-0 my-2 flex-grow-1 overflow-auto">
       <Card.Body>

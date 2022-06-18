@@ -12,7 +12,7 @@ const SearchItemDropdown = ({ id }) => {
   const dispatch = useDispatch();
   const { showModal } = useModal();
 
-  const handleClick = () => {
+  const handleAdditionToLibrary = () => {
     dispatch(fetchDetalisedItemById(id));
     toast.success(`${item.title} has been added to library`);
     dispatch(itemAddedToLibrary(item));
@@ -22,7 +22,7 @@ const SearchItemDropdown = ({ id }) => {
     <Dropdown.Menu>
       {isItemInLibrary
         ? <Dropdown.Item onClick={() => showModal('deleteItem', item)}>Delete from Library</Dropdown.Item>
-        : <Dropdown.Item onClick={handleClick}>Add to Library</Dropdown.Item>}
+        : <Dropdown.Item onClick={handleAdditionToLibrary}>Add to Library</Dropdown.Item>}
     </Dropdown.Menu>
   );
 };
