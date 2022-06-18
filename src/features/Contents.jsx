@@ -6,27 +6,16 @@ import { useState } from 'react';
 import { createSelector } from '@reduxjs/toolkit';
 
 import Notes from './Notes';
-import { selectLibraryItems } from './items/itemsSlice';
-import { selectSearchItems } from './search/searchResultsSlice';
-import { selectActiveItemId } from './uiSlice';
+import { selectLibraryItem, selectIsItemInLibrary } from './items/itemsSlice';
+import { selectSearchItem } from './search/searchResultsSlice';
 
-const selectLibraryItem = createSelector(
-  [selectLibraryItems, selectActiveItemId],
-  (libraryItems, activeItemId) => libraryItems[activeItemId],
+const selectItem = createSelector(
+  [selectIsItemInLibrary, selectLibraryItem, selectSearchItem],
+  (isItemInLibrary, libraryItem, searchItem) => (isItemInLibrary ? libraryItem : searchItem),
 );
 
-const selectSearchItem = createSelector(
-  [selectSearchItems, selectActiveItemId],
-  (searchItems, activeItemId) => searchItems[activeItemId],
-);
-
-const selectActiveItem = createSelector(
-  [selectLibraryItem, selectSearchItem],
-  (libraryItem, searchItem) => libraryItem ?? searchItem,
-);
-
-const Contents = () => {
-  const activeItem = useSelector(selectActiveItem, shallowEqual);
+const Contents = ({ itemId }) => {
+  const item = useSelector((state) => selectItem(state, itemId), shallowEqual);
   const [openNotes, setOpenNotes] = useState(false);
 
   const {

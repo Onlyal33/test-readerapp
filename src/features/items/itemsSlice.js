@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 
 const itemsSlice = createSlice({
   name: 'items',
@@ -36,10 +36,16 @@ export const {
 
 export default itemsSlice.reducer;
 
-export const selectIsItemInLibrary = (id) => (state) => state.entities.items.allIds.includes(id);
-
 export const selectLibraryItemsIds = (state) => state.entities.items.allIds;
 
 export const selectLibraryItems = (state) => state.entities.items.byId;
 
-export const selectLibraryItem = (id) => (state) => state.entities.items.byId[id];
+export const selectIsItemInLibrary = createSelector(
+  [selectLibraryItemsIds, (_, id) => id],
+  (ids, id) => ids.includes(id),
+);
+
+export const selectLibraryItem = createSelector(
+  [selectLibraryItems, (_, id) => id],
+  (items, id) => items[id],
+);

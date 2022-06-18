@@ -7,8 +7,8 @@ import { itemAddedToLibrary, selectIsItemInLibrary } from './itemsSlice.js';
 import { fetchDetalisedItemById, selectSearchItem } from '../search/searchResultsSlice.js';
 
 const SearchItemDropdown = ({ id }) => {
-  const isItemInLibrary = useSelector(selectIsItemInLibrary(id));
-  const item = useSelector(selectSearchItem(id), shallowEqual);
+  const isItemInLibrary = useSelector((state) => selectIsItemInLibrary(state, id));
+  const item = useSelector((state) => selectSearchItem(state, id), shallowEqual);
   const dispatch = useDispatch();
   const { showModal } = useModal();
 

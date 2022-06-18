@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
 
 import searchAPI from '../../common/searchAPI.js';
 
@@ -85,13 +85,18 @@ export const selectSearchItemsIds = (state) => state.entities.searchResults.allI
 
 export const selectSearchItems = (state) => state.entities.searchResults.byId;
 
-export const selectSearchItem = (id) => (state) => state.entities.searchResults.byId[id];
+export const selectSearchItem = createSelector(
+  [selectSearchItems, (_, id) => id],
+  (items, id) => items[id],
+);
 
-export const selectIsItemDetalised = (id) => (state) => state
-  .entities.searchResults.byId[id].detalised;
+export const selectIsItemDetalised = createSelector(
+  [selectSearchItems, (_, id) => id],
+  (items, id) => items[id].detalised,
+);
 
 export const fetchDetalisedItemById = (id) => async (dispatch, getState) => {
-  if (getState().ui.displayingItemType !== 'search' || selectIsItemDetalised(id)(getState())) {
+  if (getState().ui.displayingItemType !== 'search' || selectIsItemDetalised(getState(), id)) {
     return;
   }
   await dispatch(fetchItemById(id));

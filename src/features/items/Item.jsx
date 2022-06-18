@@ -23,16 +23,15 @@ const getDropdown = (type) => dropdowns[type];
 
 const getItemSelector = (type) => selectors[type];
 
-const selectItem = (type, id) => getItemSelector(type)(id);
-
 const Item = ({ type, id }) => {
   const Component = getDropdown(type);
+  const selectItem = getItemSelector(type);
 
-  const isItemActive = useSelector(selectIsItemActive(id));
-  const item = useSelector(selectItem(type, id), shallowEqual);
+  const item = useSelector((state) => selectItem(state, id), shallowEqual);
   const {
     title, author, firstPublishYear,
   } = item;
+  const isItemActive = useSelector((state) => selectIsItemActive(state, id));
 
   const dispatch = useDispatch();
 

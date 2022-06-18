@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 
 const listsSlice = createSlice({
   name: 'lists',
@@ -36,3 +36,8 @@ export default listsSlice.reducer;
 export const selectListsIds = (state) => state.entities.lists.allIds;
 
 export const selectLists = (state) => state.entities.lists.byId;
+
+export const selectList = createSelector(
+  [selectLists, (_, id) => id],
+  (lists, id) => lists[id] ?? { type: 'default', name: 'Library' },
+);

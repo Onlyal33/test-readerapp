@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 
 import { listDeleted } from './lists/listsSlice.js';
 import { itemRemovedFromLibrary } from './items/itemsSlice.js';
@@ -123,13 +123,19 @@ export const selectReadItemsVisibility = (state) => state.ui.readItemsVisibility
 
 export const selectIsAdvancedSearchVisible = (state) => state.ui.search.visibility;
 
-export const selectIsListActive = (id) => (state) => state.ui.activeList === id;
-
-export const selectIsItemActive = (id) => (state) => state.ui.activeItem === id;
-
 export const selectActiveListId = (state) => state.ui.activeList;
 
 export const selectActiveItemId = (state) => state.ui.activeItem;
+
+export const selectIsListActive = createSelector(
+  [selectActiveListId, (_, id) => id],
+  (activeListId, id) => activeListId === id,
+);
+
+export const selectIsItemActive = createSelector(
+  [selectActiveItemId, (_, id) => id],
+  (activeItemId, id) => activeItemId === id,
+);
 
 export const selectSearchStatus = (state) => state.ui.search.status;
 

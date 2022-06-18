@@ -33,7 +33,7 @@ const LibraryItemDropdown = ({ id }) => {
   const hasListsToRemoveItemFrom = useSelector(
     (state) => selectHasListsToRemoveItemFrom(state, id),
   );
-  const item = useSelector(selectLibraryItem(id), shallowEqual);
+  const item = useSelector((state) => selectLibraryItem(state, id), shallowEqual);
 
   const dispatch = useDispatch();
   const { showModal } = useModal();

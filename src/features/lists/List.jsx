@@ -5,12 +5,11 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { activeListChanged, selectIsListActive } from '../uiSlice.js';
 import useModal from '../../common/useModal.js';
 import { searchHidden } from '../search/searchResultsSlice.js';
-
-const selectList = (id) => (state) => state.entities.lists.byId[id] ?? { type: 'default', name: 'Library' };
+import { selectList } from './listsSlice.js';
 
 const List = ({ id }) => {
-  const list = useSelector(selectList(id), shallowEqual);
-  const isListActive = useSelector(selectIsListActive(id));
+  const list = useSelector((state) => selectList(state, id), shallowEqual);
+  const isListActive = useSelector((state) => selectIsListActive(state, id));
   const variant = isListActive ? 'outline-secondary' : null;
   const dispatch = useDispatch();
   const { showModal } = useModal();

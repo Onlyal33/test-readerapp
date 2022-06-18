@@ -6,8 +6,7 @@ import Item from './Item.jsx';
 import { selectDisplayingItemType, selectActiveListId, selectReadItemsVisibility } from '../uiSlice.js';
 import { selectSearchItemsIds } from '../search/searchResultsSlice.js';
 import { selectLibraryItemsIds, selectLibraryItems } from './itemsSlice.js';
-
-const selectListItem = (state) => state.entities.listItem.byId;
+import { selectListItem } from './listItemSlice.js';
 
 const selectLibraryItemsIdsByList = createSelector(
   [selectActiveListId, selectLibraryItemsIds, selectListItem],
