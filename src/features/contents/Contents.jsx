@@ -5,9 +5,9 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { createSelector } from '@reduxjs/toolkit';
 
-import Notes from './Notes';
-import { selectLibraryItem, selectIsItemInLibrary } from './items/itemsSlice';
-import { selectSearchItem } from './search/searchResultsSlice';
+import Notes from './Notes.jsx';
+import { selectLibraryItem, selectIsItemInLibrary } from '../items/itemsSlice';
+import { selectSearchItem } from '../search/searchResultsSlice';
 
 const selectItem = createSelector(
   [selectIsItemInLibrary, selectLibraryItem, selectSearchItem],

@@ -1,7 +1,7 @@
 import { Modal } from 'react-bootstrap';
 
 import useModal from '../../common/useModal.js';
-import Notes from '../Notes.jsx';
+import Notes from '../contents/Notes.jsx';
 
 const EditNotes = ({ item }) => {
   const { id, title, notes } = item;
