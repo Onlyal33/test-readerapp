@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import useModal from '../../common/useModal.js';
 import { itemAddedToLibrary, selectIsItemInLibrary } from './itemsSlice.js';
-import { fetchDetalisedItemById, selectSearchItem } from '../search/searchResultsSlice.js';
+import { selectSearchItem } from '../search/searchResultsSlice.js';
 
 const SearchItemDropdown = ({ id }) => {
   const isItemInLibrary = useSelector((state) => selectIsItemInLibrary(state, id));
@@ -13,9 +13,8 @@ const SearchItemDropdown = ({ id }) => {
   const { showModal } = useModal();
 
   const handleAdditionToLibrary = () => {
-    dispatch(fetchDetalisedItemById(id));
-    toast.success(`${item.title} has been added to library`);
     dispatch(itemAddedToLibrary(item));
+    toast.success(`${item.title} has been added to library`);
   };
 
   return (

@@ -13,11 +13,12 @@ export const fetchSearchResults = createAsyncThunk(
   },
 );
 
-export const fetchItemById = createAsyncThunk(
-  'searchResults/fetchItemById',
+export const fetchItemDetailsById = createAsyncThunk(
+  'searchResults/fetchItemDetailsById',
   async (id) => {
     const { data } = await searchAPI.fetchItemById(id);
-    return { id, data };
+    const description = data.description?.value ?? data.description;
+    return { id, data: { description, detalised: true } };
   },
 );
 
@@ -66,10 +67,9 @@ const searchResults = createSlice({
         state.byId = byId;
         state.allIds = allIds;
       })
-      .addCase(fetchItemById.fulfilled, (state, action) => {
-        const { description } = action.payload.data;
-        state.byId[action.payload.id].description = description?.value ?? description;
-        state.byId[action.payload.id].detalised = true;
+      .addCase(fetchItemDetailsById.fulfilled, (state, action) => {
+        const { data, id } = action.payload;
+        state.byId[id] = { ...state.byId[id], ...data };
       });
   },
 });
@@ -95,9 +95,10 @@ export const selectIsItemDetalised = createSelector(
   (items, id) => items[id].detalised,
 );
 
-export const fetchDetalisedItemById = (id) => async (dispatch, getState) => {
-  if (getState().ui.displayingItemType !== 'search' || selectIsItemDetalised(getState(), id)) {
-    return;
+export const fetchDetalisedItem = (item) => async (dispatch, getState) => {
+  if (getState().ui.displayingItemType !== 'search' || selectIsItemDetalised(getState(), item.id)) {
+    return item;
   }
-  await dispatch(fetchItemById(id));
+  const result = await dispatch(fetchItemDetailsById(item.id));
+  return { ...item, ...result.payload.data };
 };

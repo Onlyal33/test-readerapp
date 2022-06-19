@@ -7,7 +7,7 @@ import { selectLibraryItem } from './itemsSlice.js';
 import { activeItemChanged, selectIsItemActive } from '../uiSlice.js';
 import LibraryItemDropdown from './LibraryItemDropdown.jsx';
 import SearchItemDropdown from './SearchitemDropdown.jsx';
-import { fetchDetalisedItemById, selectSearchItem } from '../search/searchResultsSlice.js';
+import { fetchDetalisedItem, selectSearchItem } from '../search/searchResultsSlice.js';
 
 const dropdowns = {
   library: LibraryItemDropdown,
@@ -36,7 +36,7 @@ const Item = ({ type, id }) => {
   const dispatch = useDispatch();
 
   const handleSelectItem = () => {
-    dispatch(fetchDetalisedItemById(id));
+    dispatch(fetchDetalisedItem(item));
     dispatch(activeItemChanged({ id }));
   };
 

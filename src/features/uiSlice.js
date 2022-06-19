@@ -3,7 +3,7 @@ import { createSelector, createSlice } from '@reduxjs/toolkit';
 
 import { listDeleted } from './lists/listsSlice.js';
 import { itemRemovedFromLibrary } from './items/itemsSlice.js';
-import { fetchItemById, fetchSearchResults, searchHidden } from './search/searchResultsSlice.js';
+import { fetchItemDetailsById, fetchSearchResults, searchHidden } from './search/searchResultsSlice.js';
 
 const uiSlice = createSlice({
   name: 'ui',
@@ -84,14 +84,14 @@ const uiSlice = createSlice({
         state.search.status = 'failed';
         state.networkError = action.error.message;
       })
-      .addCase(fetchItemById.pending, (state) => {
+      .addCase(fetchItemDetailsById.pending, (state) => {
         state.fetchItem.status = 'loading';
         state.networkError = null;
       })
-      .addCase(fetchItemById.fulfilled, (state) => {
+      .addCase(fetchItemDetailsById.fulfilled, (state) => {
         state.fetchItem.status = 'idle';
       })
-      .addCase(fetchItemById.rejected, (state, action) => {
+      .addCase(fetchItemDetailsById.rejected, (state, action) => {
         state.fetchItem.status = 'failed';
         state.networkError = action.error.message;
       })

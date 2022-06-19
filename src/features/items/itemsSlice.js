@@ -1,5 +1,18 @@
 /* eslint-disable no-param-reassign */
-import { createSlice, createSelector } from '@reduxjs/toolkit';
+import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchDetalisedItem } from '../search/searchResultsSlice.js';
+
+export const itemAddedToLibrary = createAsyncThunk(
+  'items/itemAddedToLibrary',
+  async (item, { dispatch, getState }) => {
+    if (getState().entities.searchResults.byId[item.id].detalised) {
+      return item;
+    }
+
+    const detalisedItem = await dispatch(fetchDetalisedItem(item));
+    return detalisedItem;
+  },
+);
 
 const itemsSlice = createSlice({
   name: 'items',
@@ -8,10 +21,6 @@ const itemsSlice = createSlice({
     allIds: [],
   },
   reducers: {
-    itemAddedToLibrary(state, action) {
-      state.byId[action.payload.id] = action.payload;
-      state.allIds.push(action.payload.id);
-    },
     itemRemovedFromLibrary(state, action) {
       const idToDelete = action.payload.id;
       const { [idToDelete]: deleted, ...modifiedState } = state.byId;
@@ -25,10 +34,16 @@ const itemsSlice = createSlice({
       state.byId[action.payload.id].notes = action.payload.notes;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(itemAddedToLibrary.fulfilled, (state, action) => {
+        state.byId[action.payload.id] = action.payload;
+        state.allIds.push(action.payload.id);
+      });
+  },
 });
 
 export const {
-  itemAddedToLibrary,
   itemRemovedFromLibrary,
   readStatusToggled,
   notesChanged,
