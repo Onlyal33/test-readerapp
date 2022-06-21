@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -8,15 +7,12 @@ const ErrorToasts = () => {
   const networkError = useSelector(selectNetworkError);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (networkError) {
-      toast.error(networkError, {
-        onOpen: () => {
-          dispatch(errorMessageShown());
-        },
-      });
-    }
-  }, [networkError]);
+  if (networkError) {
+    toast.error(networkError, {
+      toastId: networkError,
+      onClose: () => dispatch(errorMessageShown()),
+    });
+  }
 
   return null;
 };
